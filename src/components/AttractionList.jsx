@@ -1,11 +1,13 @@
-const AttractionList = () => {
+import PropTypes from 'prop-types';
+
+const AttractionList = ({ attractions }) => {
     return (
     <div className='attraction-list'>
         <h2>Attractions List (Selection Block)</h2>
         <ul>
-            <li><input type='checkbox' /> Museum A</li>
-            <li><input type='checkbox' /> Museum B</li>
-            <li><input type='checkbox' /> Museum C</li>
+            {attractions.map((attraction) => (
+                <li key={attraction.osm_id}><input type="checkbox" />{attraction.name} </li>
+            ))}
         </ul>
         <button>Select All</button>
         <button>Deselect All</button>
@@ -13,4 +15,10 @@ const AttractionList = () => {
     );
 };
 
+AttractionList.propTypes = {
+    ttractions: PropTypes.array.isRequired,
+};
+
 export default AttractionList;
+
+
