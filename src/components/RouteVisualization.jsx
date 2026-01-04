@@ -1,6 +1,6 @@
 const RouteVisualization = () => {
     return (
-    <div className="route-visualization">
+    <div className='route-visualization'>
         <h3>Route Visualization</h3>
         <p>
             This section is reserved for route visualization. At the current stage,
