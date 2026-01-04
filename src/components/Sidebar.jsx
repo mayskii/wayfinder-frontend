@@ -4,7 +4,7 @@ import RoutePreview from './RoutePreview';
 
 const Sidebar = () => {
     return (
-    <aside className="sidebar">
+    <aside className='sidebar'>
         <AttractionList />
         <RoutePreview />
         <RouteControls />
