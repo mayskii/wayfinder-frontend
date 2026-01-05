@@ -32,6 +32,14 @@ function App() {
     alert(`Route '${newRoute.name}' created!`);
   }
 
+  const loadRoute = (route) => {
+    setSelectedAttractions(route.attractions);
+  };
+
+  const deleteRoute = (routeId) => {
+    setSavedRoutes(savedRoutes.filter((r) => r.id !== routeId));
+  };
+
   return (
     <div className='app-container'>
       <Header />
@@ -47,8 +55,10 @@ function App() {
         />
       </div>
 
-      <SavedRoutes routes={savedRoutes}/>
-
+      <SavedRoutes 
+        routes={savedRoutes}
+        loadRoute={loadRoute}
+        deleteRoute={deleteRoute}/>
       <Footer />
 
     </div>
