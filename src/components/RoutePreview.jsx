@@ -1,14 +1,28 @@
-const RoutePreview = () => {
+import PropTypes from 'prop-types';
+
+
+const RoutePreview = ({ selectedAttractions }) => {
+
     return (
-    <div className='route-preview'>
+    <div className="route-preview">
         <h4>Route Preview</h4>
+        {selectedAttractions.length === 0 ? ( <p>No attractions selected</p>
+        ) : (
         <ol>
-            <li>Museum B (1.2 km)</li>
-            <li>Museum A (0.8 km)</li>
-            <li>Museum C (2.1 km)</li>
+            {selectedAttractions.map((attraction) => (
+                <li key={attraction.osm_id}>
+                {attraction.name}
+                {attraction.distance_km && ` (${attraction.distance_km} km)`}
+            </li>
+        ))}
         </ol>
+    )}
     </div>
     );
 }
+
+RoutePreview.propTypes = {
+    selectedAttractions: PropTypes.array.isRequired,
+};
 
 export default RoutePreview

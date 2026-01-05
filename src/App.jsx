@@ -16,6 +16,7 @@ function App() {
 
   const [attractions] = useState(attractionsMock);
   const [savedRoutes] = useState(savedRoutesMock);
+  const [selectedAttractions, setSelectedAttractions] = useState([]);
 
   return (
     <div className='app-container'>
@@ -24,7 +25,11 @@ function App() {
 
       <div className='main-content'>
         <RouteVisualization />
-        <Sidebar attractions={attractions}/>
+        <Sidebar 
+          attractions={attractions}
+          selectedAttractions={selectedAttractions}
+          setSelectedAttractions={setSelectedAttractions}
+        />
       </div>
 
       <SavedRoutes routes={savedRoutes}/>
