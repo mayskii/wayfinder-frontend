@@ -15,8 +15,22 @@ import './App.css'
 function App() {
 
   const [attractions] = useState(attractionsMock);
-  const [savedRoutes] = useState(savedRoutesMock);
   const [selectedAttractions, setSelectedAttractions] = useState([]);
+  const [savedRoutes, setSavedRoutes] = useState(savedRoutesMock);
+
+  const createRoute = () => {
+    if (selectedAttractions.length === 0) return;
+
+    const newRoute = {
+      id: Date.now(),
+      name: `Route ${savedRoutes.length + 1}`,
+      attractions: selectedAttractions,
+      created_at: new Date().toISOString(),
+    };
+
+    setSavedRoutes([...savedRoutes, newRoute]);
+    alert(`Route '${newRoute.name}' created!`);
+  }
 
   return (
     <div className='app-container'>
@@ -29,6 +43,7 @@ function App() {
           attractions={attractions}
           selectedAttractions={selectedAttractions}
           setSelectedAttractions={setSelectedAttractions}
+          createRoute={createRoute}
         />
       </div>
 
