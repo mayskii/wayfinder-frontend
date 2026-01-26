@@ -17,6 +17,7 @@ import './App.css'
 function App() {
   const { user } = useAuth();
 
+  const [currentCity, setCurrentCity] = useState(null);
   const [attractions] = useState(attractionsMock);
   const [selectedAttractions, setSelectedAttractions] = useState([]);
   const [savedRoutes, setSavedRoutes] = useState(savedRoutesMock);
@@ -63,10 +64,11 @@ function App() {
     <div className='app-container'>
       <Header />
       {showSignIn && <SignInModal onClose={() => setShowSignIn(false)} />}
-      <CitySearch />
+      <CitySearch onCityLoaded={setCurrentCity} />
 
       <div className='main-content'>
-        <RouteVisualization 
+        <RouteVisualization
+          city={currentCity}
           selectedAttractions={selectedAttractions}/>
         <Sidebar 
           attractions={attractions}
