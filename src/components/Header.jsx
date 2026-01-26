@@ -1,52 +1,33 @@
+import { useState } from 'react';
 import { useAuth } from '../auth/useAuth';
-import { signIn, signUp, logOut } from '../auth/authFunctions';
-
-const TEST_EMAIL = 'test@test.com';
-const TEST_PASSWORD = '123456';
-
+import { logOut } from '../auth/authFunctions';
+import SignInModal from './SingInModal';
+import SignUpModal from './SingUpModal';
 
 const Header = () => {
     const { user } = useAuth();
-
-    const handleSignIn = async () => {
-    try {
-        await signIn(TEST_EMAIL, TEST_PASSWORD);
-    } catch (e) {
-        alert(e.message);
-    }
-    };
-
-    const handleSignUp = async () => {
-    try {
-        await signUp(TEST_EMAIL, TEST_PASSWORD);
-    } catch (e) {
-        alert(e.message);
-    }
-    };
-
-    const handleSignOut = async () => {
-    await logOut();
-    };
-
-
-
+    const [showSignIn, setShowSignIn] = useState(false);
+    const [showSignUp, setShowSignUp] = useState(false);
 
     return (
     <header className='header'>
         <h2>Wayfinder</h2>
         <div className='auth-buttons'>
-        {user ? (
+        {!user ? (
             <>
-            <span>Welcome, {user.email}</span>
-            <button onClick={handleSignOut}>Sign Out</button>
+            <button onClick={() => setShowSignIn(true)}>Sign In</button>
+            <button onClick={() => setShowSignUp(true)}>Sign Up</button>
             </>
         ) : (
             <>
-            <button onClick={handleSignIn}>Sign In</button>
-            <button onClick={handleSignUp}>Sign Up</button>
+            <span>Welcome, {user.email}</span>
+            <button onClick={logOut}>Sign Out</button>
             </>
         )}
         </div>
+
+        {showSignIn && <SignInModal onClose={() => setShowSignIn(false)} />}
+        {showSignUp && <SignUpModal onClose={() => setShowSignUp(false)} />}
     </header>
     );
 };
