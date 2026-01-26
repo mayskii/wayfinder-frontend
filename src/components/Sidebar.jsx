@@ -2,7 +2,7 @@ import AttractionList from './AttractionList';
 import RouteControls from './RouteControls';
 import RoutePreview from './RoutePreview';
 
-const Sidebar = ({ attractions, selectedAttractions, setSelectedAttractions, createRoute }) => {
+const Sidebar = ({ attractions, selectedAttractions, setSelectedAttractions, createRoute, saveRoute, user,  showSignInModal}) => {
     return (
     <aside className='sidebar'>
         <AttractionList 
@@ -11,7 +11,12 @@ const Sidebar = ({ attractions, selectedAttractions, setSelectedAttractions, cre
             setSelectedAttractions={setSelectedAttractions}
         />
         <RoutePreview selectedAttractions={selectedAttractions}/>
-        <RouteControls  createRoute={createRoute}/>
+        <RouteControls  
+            createRoute={createRoute}
+            saveRoute={saveRoute}
+            user={user}
+            showSignInModal={showSignInModal}
+            />
     </aside>
     );
 }
