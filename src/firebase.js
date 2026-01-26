@@ -2,13 +2,13 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBUAQmR12m8zb7tkwRfw3KvKMscEyDaF0M",
-    authDomain: "wayfinderapp-8f8f7.firebaseapp.com",
-    projectId: "wayfinderapp-8f8f7",
-    storageBucket: "wayfinderapp-8f8f7.firebasestorage.app",
-    messagingSenderId: "284872104501",
-    appId: "1:284872104501:web:2640e04a09f66a13f26f7c",
-    measurementId: "G-JKVLPLVKSG"
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.VITE_FIREBASE_APP_ID,
+    measurementId: import.meta.env.VITE_FIREBASE_MESSAGING_ID,
 };
 
 const app = initializeApp(firebaseConfig);
