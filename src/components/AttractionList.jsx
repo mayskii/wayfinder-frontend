@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 
-const AttractionList = ({ attractions, selectedAttractions, setSelectedAttractions, pageSize = 10 }) => {
+const AttractionList = ({ attractions, selectedAttractions, setSelectedAttractions, pageSize = 5 }) => {
 
     const validAttractions = attractions.filter(a => a.name && a.name !== "Unknown");
 

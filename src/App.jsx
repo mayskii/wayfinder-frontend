@@ -9,6 +9,7 @@ import Footer from './components/Footer';
 import SavedRoutes from './components/SavedRoutes';
 import { useAuth } from './auth/useAuth';
 import SignInModal from './components/SingInModal';
+import { attractionKey } from './utils';
 
 import './App.css'
 
@@ -34,11 +35,18 @@ function App() {
     }
   };
 
+// delete attraction
+const handleRemoveAttraction = (key) => {
+  setSelectedAttractions((prev) =>
+    prev.filter(a => attractionKey(a) !== key)
+  );
+};
+
 // creation route
   const createRoute = () => {
     if (selectedAttractions.length === 0) return;
 
-    const newRoute = {
+  const newRoute = {
       id: Date.now(),
       name: `Route ${savedRoutes.length + 1}`,
       attractions: selectedAttractions,
@@ -84,7 +92,9 @@ function App() {
       <div className='main-content'>
         <RouteVisualization
           city={currentCity}
-          selectedAttractions={selectedAttractions}/>
+          selectedAttractions={selectedAttractions}
+          onRemoveAttraction={handleRemoveAttraction}
+          />
 
         <Sidebar 
           attractions={attractions}

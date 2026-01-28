@@ -1,0 +1,1 @@
+export const attractionKey = (a) => a.osmId ?? a.id ?? `${a.lat}_${a.lng}_${a.name}`;
