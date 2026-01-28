@@ -1,0 +1,22 @@
+.attraction-list ul {
+    max-height: 250px;
+    overflow-y: auto;
+    padding-left: 1rem;
+}
+
+.attraction-list li {
+    margin-bottom: 0.3rem;
+}
+
+.attraction-list .buttons, .attraction-list .pagination {
+    margin-top: 0.5rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.attraction-list button {
+    padding: 4px 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
