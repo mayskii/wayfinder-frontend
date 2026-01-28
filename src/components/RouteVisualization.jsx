@@ -46,7 +46,7 @@ const RouteVisualization = ({ selectedAttractions, city }) => {
 
         {selectedAttractions.map(a =>
             a.lat != null && a.lng != null ? (
-            <Marker key={a.id || a.id} position={[a.lat, a.lng]}>
+            <Marker key={a.id} position={[a.lat, a.lng]}>
                 <Popup>
                     <strong>{a.name}</strong><br />
                     Category: {a.category}<br />

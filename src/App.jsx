@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import api from './api';
 
 import Header from './components/Header';
 import CitySearch from './components/CitySearch';
@@ -9,21 +10,31 @@ import SavedRoutes from './components/SavedRoutes';
 import { useAuth } from './auth/useAuth';
 import SignInModal from './components/SingInModal';
 
-import { attractionsMock } from './mocks/attractions';
-import { savedRoutesMock } from './mocks/routes';
-
 import './App.css'
+
 
 function App() {
   const { user } = useAuth();
 
   const [currentCity, setCurrentCity] = useState(null);
-  const [attractions] = useState(attractionsMock);
+  const [attractions, setAttractions] = useState([]);
   const [selectedAttractions, setSelectedAttractions] = useState([]);
-  const [savedRoutes, setSavedRoutes] = useState(savedRoutesMock);
+  const [savedRoutes, setSavedRoutes] = useState([]);
   const [currentRoute, setCurrentRoute] = useState(null);
   const [showSignIn, setShowSignIn] = useState(false);
 
+// attractions from back
+  const loadAttractions = async (cityName) => {
+    try {
+      const response = await api.get(`/attractions/from-osm?cityName=${cityName}`);
+      setAttractions(response.data);
+    } catch (error) {
+      console.error('Error loading attractions:', error);
+      setAttractions([]);
+    }
+  };
+
+// creation route
   const createRoute = () => {
     if (selectedAttractions.length === 0) return;
 
@@ -37,7 +48,7 @@ function App() {
     alert(`Route created!`);
   }
 
-
+// save route
   const saveRoute = () => {
     if (!currentRoute) return;
     if (!user) {
@@ -48,28 +59,33 @@ function App() {
     alert(`Route saved!`);
   };
 
-
+// load route
   const loadRoute = (route) => {
     setSelectedAttractions(route.attractions);
   };
 
-
+// delete route
   const deleteRoute = (routeId) => {
     setSavedRoutes(savedRoutes.filter((r) => r.id !== routeId));
   };
-
-
 
   return (
     <div className='app-container'>
       <Header />
       {showSignIn && <SignInModal onClose={() => setShowSignIn(false)} />}
-      <CitySearch onCityLoaded={setCurrentCity} />
+
+      <CitySearch 
+        onCityLoaded={(city) => {
+          setCurrentCity(city);
+          if (city?.name) loadAttractions(city.name);
+        }} 
+      />
 
       <div className='main-content'>
         <RouteVisualization
           city={currentCity}
           selectedAttractions={selectedAttractions}/>
+
         <Sidebar 
           attractions={attractions}
           selectedAttractions={selectedAttractions}
@@ -81,14 +97,13 @@ function App() {
         />
       </div>
 
-      <SavedRoutes
-        user={user}
-        routes={savedRoutes}
-        loadRoute={loadRoute}
-        deleteRoute={deleteRoute}
-        />
-      <Footer />
-
+        <SavedRoutes
+          user={user}
+          routes={savedRoutes}
+          loadRoute={loadRoute}
+          deleteRoute={deleteRoute}
+          />
+        <Footer />
     </div>
   )
 }
