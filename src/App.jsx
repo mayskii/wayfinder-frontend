@@ -16,6 +16,7 @@ import './App.css'
 
 function App() {
   const { user } = useAuth();
+  const [dbUser, setDbUser] = useState(null);
 
   const [currentCity, setCurrentCity] = useState(null);
   const [attractions, setAttractions] = useState([]);
@@ -27,13 +28,32 @@ function App() {
   const [filterType, setFilterType] = useState('');
 
 
+// Firebase  -->  dbUser from bacc
+  useEffect(() => {
+    const registerOrGetUser = async () => {
+      if (!user) return;
+
+      try {
+        const response = await api.post('/users/create-or-get', {
+          email: user.email,
+          name: user.displayName || "Unknown"
+        });
+        setDbUser(response.data);
+        console.log("Backend user:", response.data);
+      } catch (err) {
+        console.error("Error registering user:", err);
+      }
+    };
+
+    registerOrGetUser();
+  }, [user]);
+
 // useEffect for filtering
   useEffect(() => {
     if (currentCity?.name) {
       loadAttractions(currentCity.name, filterType);
     }
   }, [filterType, currentCity]);
-
 
 // attractions from back
   const loadAttractions = async (cityName, filterType) => {
@@ -71,6 +91,7 @@ const handleRemoveAttraction = (key) => {
       name: `Route ${savedRoutes.length + 1}`,
       attractions: selectedAttractions,
       created_at: new Date().toISOString(),
+      userId: dbUser?.id,
     };
     setCurrentRoute(newRoute);
     alert(`Route created!`);
