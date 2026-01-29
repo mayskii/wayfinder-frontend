@@ -4,15 +4,20 @@ import api from '../api';
 const CitySearch = ({ onCityLoaded }) => {
 
     const [query, setQuery] = useState('');
+    const [filterType, setFilterType] = useState('');
 
-        const handleSearch = async () => {
+    const handleSearch = async () => {
     if (!query) return;
     try {
         const response = await api.get('/cities/lookup', {
         params: { name: query }
         });
-        const city = response.data;
-        console.log(response.data)
+        let city = response.data;
+
+        if (filterType && city.attractions) {
+                city.attractions = city.attractions.filter(a => a.type === filterType);
+            }
+
         onCityLoaded(city);
     } catch (error) {
         console.error('City search error:', error);
@@ -28,13 +33,13 @@ const CitySearch = ({ onCityLoaded }) => {
             value={query} 
             onChange={e => setQuery(e.target.value)} 
             />
-            <button onClick={handleSearch}>Search</button>
-            <select>
+            <select value={filterType} onChange={e => setFilterType(e.target.value)}>
                 <option value=''>All Types</option>
                 <option value='museum'>Museum</option>
                 <option value='park'>Park</option>
                 <option value='restaurant'>Restaurant</option>
             </select>
+            <button onClick={handleSearch}>Search</button>
         </div>
     );
 };

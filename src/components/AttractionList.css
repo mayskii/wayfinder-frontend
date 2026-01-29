@@ -1,4 +1,4 @@
-/* .attraction-list {
+.attraction-list {
     min-height: 300px;
     position: relative;
 }
@@ -39,9 +39,3 @@
     gap: 0.5rem;
     align-items: center;
 }
-
-.attraction-list button {
-    padding: 4px 8px;
-    font-size: 0.9rem;
-    cursor: pointer;
-} */
