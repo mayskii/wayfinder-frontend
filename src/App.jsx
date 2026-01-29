@@ -9,6 +9,7 @@ import Footer from './components/Footer';
 import SavedRoutes from './components/SavedRoutes';
 import { useAuth } from './auth/useAuth';
 import SignInModal from './components/SingInModal';
+import { attractionKey } from './utils';
 
 import './App.css'
 
@@ -22,23 +23,37 @@ function App() {
   const [savedRoutes, setSavedRoutes] = useState([]);
   const [currentRoute, setCurrentRoute] = useState(null);
   const [showSignIn, setShowSignIn] = useState(false);
+  const [loadingAttractions, setLoadingAttractions] = useState(false);
 
 // attractions from back
   const loadAttractions = async (cityName) => {
+  setSelectedAttractions([]);
+  setAttractions([]);
+  setLoadingAttractions(true);
+
     try {
       const response = await api.get(`/attractions/from-osm?cityName=${cityName}`);
       setAttractions(response.data);
     } catch (error) {
       console.error('Error loading attractions:', error);
       setAttractions([]);
+    } finally {
+    setLoadingAttractions(false);
     }
   };
+
+// delete attraction
+const handleRemoveAttraction = (key) => {
+  setSelectedAttractions((prev) =>
+    prev.filter(a => attractionKey(a) !== key)
+  );
+};
 
 // creation route
   const createRoute = () => {
     if (selectedAttractions.length === 0) return;
 
-    const newRoute = {
+  const newRoute = {
       id: Date.now(),
       name: `Route ${savedRoutes.length + 1}`,
       attractions: selectedAttractions,
@@ -84,7 +99,9 @@ function App() {
       <div className='main-content'>
         <RouteVisualization
           city={currentCity}
-          selectedAttractions={selectedAttractions}/>
+          selectedAttractions={selectedAttractions}
+          onRemoveAttraction={handleRemoveAttraction}
+          />
 
         <Sidebar 
           attractions={attractions}
@@ -94,6 +111,7 @@ function App() {
           saveRoute={saveRoute}
           user={user}
           showSignInModal={() => setShowSignIn(true)}
+          loading={loadingAttractions}
         />
       </div>
 
