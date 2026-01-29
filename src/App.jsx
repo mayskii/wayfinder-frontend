@@ -23,15 +23,22 @@ function App() {
   const [savedRoutes, setSavedRoutes] = useState([]);
   const [currentRoute, setCurrentRoute] = useState(null);
   const [showSignIn, setShowSignIn] = useState(false);
+  const [loadingAttractions, setLoadingAttractions] = useState(false);
 
 // attractions from back
   const loadAttractions = async (cityName) => {
+  setSelectedAttractions([]);
+  setAttractions([]);
+  setLoadingAttractions(true);
+
     try {
       const response = await api.get(`/attractions/from-osm?cityName=${cityName}`);
       setAttractions(response.data);
     } catch (error) {
       console.error('Error loading attractions:', error);
       setAttractions([]);
+    } finally {
+    setLoadingAttractions(false);
     }
   };
 
@@ -104,6 +111,7 @@ const handleRemoveAttraction = (key) => {
           saveRoute={saveRoute}
           user={user}
           showSignInModal={() => setShowSignIn(true)}
+          loading={loadingAttractions}
         />
       </div>
 

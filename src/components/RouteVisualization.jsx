@@ -56,10 +56,12 @@ const RouteVisualization = ({ selectedAttractions, city, onRemoveAttraction }) =
 
     return (
     <div className="route-visualization">
-        <h3>Route Visualization</h3>
-        <p>
-        City: {city.name}, {city.country}
-        </p>
+        <div>
+            <h3>Route Visualization</h3>
+            <p>
+                City: {city.name}, {city.country}
+            </p>
+        </div>
 
     < MapContainer className="route-map" center={center} zoom={12}>
         <TileLayer
@@ -115,11 +117,11 @@ const RouteVisualization = ({ selectedAttractions, city, onRemoveAttraction }) =
         )}
     </MapContainer>
 
-    <ol className="route-list">
-    {selectedAttractions.map((a) => (
-        <li key={attractionKey(a)}>{a.name}</li>
-    ))}
-    </ol>
+        <ol className="route-list">
+            {selectedAttractions.map((a) => (
+            <li key={attractionKey(a)}>{a.name}</li>
+            ))}
+        </ol>
     </div>
     );
 };
