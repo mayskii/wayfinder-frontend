@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import api from './api';
 
 import Header from './components/Header';
@@ -24,23 +24,36 @@ function App() {
   const [currentRoute, setCurrentRoute] = useState(null);
   const [showSignIn, setShowSignIn] = useState(false);
   const [loadingAttractions, setLoadingAttractions] = useState(false);
+  const [filterType, setFilterType] = useState('');
+
+
+// useEffect for filtering
+  useEffect(() => {
+    if (currentCity?.name) {
+      loadAttractions(currentCity.name, filterType);
+    }
+  }, [filterType, currentCity]);
+
 
 // attractions from back
-  const loadAttractions = async (cityName) => {
-  setSelectedAttractions([]);
-  setAttractions([]);
+  const loadAttractions = async (cityName, filterType) => {
   setLoadingAttractions(true);
-
-    try {
-      const response = await api.get(`/attractions/from-osm?cityName=${cityName}`);
-      setAttractions(response.data);
-    } catch (error) {
-      console.error('Error loading attractions:', error);
-      setAttractions([]);
-    } finally {
-    setLoadingAttractions(false);
+  try {
+    const response = await api.get(`/attractions/from-osm?cityName=${cityName}`);
+    let data = response.data;
+    
+    if (filterType) {
+      data = data.filter(a => a.category === filterType);
     }
-  };
+
+    setAttractions(data);
+  } catch (error) {
+    console.error('Error loading attractions:', error);
+    setAttractions([]);
+  } finally {
+    setLoadingAttractions(false);
+  }
+};
 
 // delete attraction
 const handleRemoveAttraction = (key) => {
@@ -89,10 +102,12 @@ const handleRemoveAttraction = (key) => {
       <Header />
       {showSignIn && <SignInModal onClose={() => setShowSignIn(false)} />}
 
-      <CitySearch 
+      <CitySearch
+        filterType={filterType}
+        setFilterType={setFilterType} 
         onCityLoaded={(city) => {
           setCurrentCity(city);
-          if (city?.name) loadAttractions(city.name);
+          if (city?.name) loadAttractions(city.name, filterType);
         }} 
       />
 

@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import api from '../api';
 
-const CitySearch = ({ onCityLoaded }) => {
+const CitySearch = ({ onCityLoaded, filterType, setFilterType }) => {
 
     const [query, setQuery] = useState('');
-    const [filterType, setFilterType] = useState('');
 
     const handleSearch = async () => {
     if (!query) return;
@@ -15,8 +14,8 @@ const CitySearch = ({ onCityLoaded }) => {
         let city = response.data;
 
         if (filterType && city.attractions) {
-                city.attractions = city.attractions.filter(a => a.type === filterType);
-            }
+        city.attractions = city.attractions.filter(a => a.category === filterType);
+        }
 
         onCityLoaded(city);
     } catch (error) {
@@ -36,8 +35,8 @@ const CitySearch = ({ onCityLoaded }) => {
             <select value={filterType} onChange={e => setFilterType(e.target.value)}>
                 <option value=''>All Types</option>
                 <option value='museum'>Museum</option>
-                <option value='park'>Park</option>
-                <option value='restaurant'>Restaurant</option>
+                <option value='artwork'>Artwork</option>
+                <option value='gallery'>Gallery</option>
             </select>
             <button onClick={handleSearch}>Search</button>
         </div>
