@@ -25,43 +25,40 @@ function App() {
   const [showSignIn, setShowSignIn] = useState(false);
   const [loadingAttractions, setLoadingAttractions] = useState(false);
   const [filterType, setFilterType] = useState('');
+  const [currentRouteId, setCurrentRouteId] = useState(null);
+  const [isRouteOptimized, setIsRouteOptimized] = useState(false);
 
 
-// Firebase  -->  dbUser from back
+// useEffect for sign in / sign out and loading user routes
   useEffect(() => {
-    const registerOrGetUser = async () => {
-      if (!user) return;
+    const initUser = async () => {
+      if (!user) {
+        setDbUser(null);
+        setSavedRoutes([]);
+        setSelectedAttractions([]);
+        return;
+      }
 
       try {
         const response = await api.post('/users/create-or-get', {
           email: user.email,
-          name: user.displayName || "Unknown"
+          name: user.displayName || 'Unknown',
         });
-        setDbUser(response.data);
-        console.log("Backend user:", response.data);
+        const dbUserData = response.data;
+        setDbUser(dbUserData);
+
+        // user's saved routes
+        const routesResp = await api.get(`/routes/by-user/${dbUserData.id}`);
+        setSavedRoutes(routesResp.data);
+
+        console.log('Backend user and routes loaded:', dbUserData, routesResp.data);
       } catch (err) {
-        console.error("Error registering user:", err);
+        console.error('Error initializing user:', err);
       }
     };
-    registerOrGetUser();
+
+    initUser();
   }, [user]);
-
-//
-useEffect(() => {
-  if (!dbUser) return;
-
-  const loadRoutes = async () => {
-    try {
-      const response = await api.get(`/routes/by-user/${dbUser.id}`);
-      setSavedRoutes(response.data);
-    } catch (err) {
-      console.error('Error loading routes:', err);
-    }
-  };
-
-  loadRoutes();
-}, [dbUser]);
-
 
 // useEffect for filtering
   useEffect(() => {
@@ -98,7 +95,6 @@ useEffect(() => {
   );
 };
 
-
 // save route
 const saveRoute = async () => {
   if (!dbUser) {
@@ -107,9 +103,21 @@ const saveRoute = async () => {
   }
 
   try {
+
+    let maxNumber = 0;
+    savedRoutes.forEach(r => {
+      const match = r.name.match(/Route (\d+)/);
+      if (match) {
+        const num = parseInt(match[1], 10);
+        if (num > maxNumber) maxNumber = num;
+      }
+    });
+
+    const routeName = `Route ${maxNumber + 1}`;
+
     const response = await api.post('/routes', {
       user: { id: dbUser.id },
-      name: `Route ${savedRoutes.length + 1}`
+      name: routeName
     });
 
     const newRoute = response.data;
@@ -136,35 +144,59 @@ const saveRoute = async () => {
 // optimization with save
   const optimizeRoute = async () => {
 
-    if (!user) {
+  if (!user) {
     setShowSignIn(true);
     return;
   }
 
-    if (!dbUser) {
-      alert('Please wait.....');
-      return;
-    }
+  if (!dbUser) {
+    alert('Please wait...');
+    return;
+  }
 
-    let lastRouteId = savedRoutes.length > 0
-      ? savedRoutes[savedRoutes.length - 1].id
-      : null;
+  try {
+    let routeId = currentRouteId;
 
-    if (!lastRouteId) {
+    if (!routeId) {
       const saved = await saveRoute();
-      if (!saved) return;
-      lastRouteId = saved.id;
+      if (!saved?.id) return;
+      routeId = saved.id;
+      setCurrentRouteId(routeId);
     }
 
-    try {
-      const response = await api.post(`/route-attractions/optimize/${lastRouteId}`);
-      setSelectedAttractions(response.data.map(ra => ra.attraction));
-      alert('Route optimized!');
-    } catch (err) {
-      console.error('Error optimize route:', err);
-      alert('Failed to optimize the route.');
-    }
-  };
+    const response = await api.post(
+      `/route-attractions/optimize/${routeId}`
+    );
+
+    const optimizedAttractions = response.data
+      .sort((a, b) => a.position - b.position)
+      .map(ra => ra.attraction);
+
+    setSelectedAttractions([...optimizedAttractions]);
+
+    setCurrentRouteId(null);
+    setIsRouteOptimized(true);
+
+  } catch (err) {
+    console.error('Optimize error:', err);
+    alert('Failed to optimize route');
+  }
+};
+
+const handleCityLoaded = (city) => {
+
+  if (isRouteOptimized) {
+    setSelectedAttractions([]);
+    setIsRouteOptimized(false);
+    setCurrentRouteId(null);
+  }
+
+  setCurrentCity(city);
+
+  if (city?.name) {
+    loadAttractions(city.name, filterType);
+  }
+};
 
 
   // load route
@@ -198,11 +230,8 @@ const saveRoute = async () => {
 
       <CitySearch
         filterType={filterType}
-        setFilterType={setFilterType} 
-        onCityLoaded={(city) => {
-          setCurrentCity(city);
-          if (city?.name) loadAttractions(city.name, filterType);
-        }} 
+        setFilterType={setFilterType}
+        onCityLoaded={handleCityLoaded}
       />
 
       <div className='main-content'>
@@ -210,6 +239,7 @@ const saveRoute = async () => {
           city={currentCity}
           selectedAttractions={selectedAttractions}
           onRemoveAttraction={handleRemoveAttraction}
+          defaultCenter={[20, 0]}
           />
 
         <Sidebar 

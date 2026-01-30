@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import api from '../api';
 
-const CitySearch = ({ onCityLoaded, filterType, setFilterType }) => {
+const CitySearch = ({ filterType, setFilterType, onCityLoaded }) => {
 
     const [query, setQuery] = useState('');
 

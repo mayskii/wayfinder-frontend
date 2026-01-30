@@ -29,100 +29,86 @@ const attractionIcon = (index) =>
     iconAnchor: [14, 14],
     });
 
-const FitRoute = ({ positions, fallbackCenter }) => {
+const FitRoute = ({ positions, city, defaultCenter }) => {
     const map = useMap();
 
     useEffect(() => {
-        if (positions.length > 1) {
-        map.fitBounds(positions, { padding: [40, 40] });
+        if (positions.length > 0) {
+            
+            map.fitBounds(positions, { padding: [40, 40] });
+        } else if (city?.lat != null && city?.lng != null) {
+
+            map.setView([city.lat, city.lng], 10);
         } else {
-        map.setView(fallbackCenter, 12);
+            
+            map.setView(defaultCenter, 2);
         }
-    }, [positions, fallbackCenter, map]);
+    }, [positions, city, defaultCenter, map]);
 
     return null;
 };
 
-const RouteVisualization = ({ selectedAttractions, city, onRemoveAttraction }) => {
-    if (!city || city.lat == null || city.lng == null) {
-        return <p>Please select a city to visualize the route</p>;
-    }
-
-    const center = [city.lat, city.lng];
-
+const RouteVisualization = ({ selectedAttractions, city, onRemoveAttraction, defaultCenter }) => {
     const routePositions = selectedAttractions
-    .filter(a => a.lat !== null && a.lng !== null)
-    .map(a => [a.lat, a.lng]);
+        .filter(a => a.lat != null && a.lng != null)
+        .map(a => [a.lat, a.lng]);
 
     return (
-    <div className="route-visualization">
+        <div className="route-visualization">
         <div>
             <h3>Route Visualization</h3>
             <p>
-                City: {city.name}, {city.country}
+            {city
+                ? `City: ${city.name}, ${city.country}`
+                : 'Please select a city to visualize the route'}
             </p>
         </div>
 
-    < MapContainer className="route-map" center={center} zoom={12}>
-        <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        />
-        <FitRoute positions={routePositions} fallbackCenter={center} />
+        <MapContainer className="route-map" center={defaultCenter} zoom={2}>
+            <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            />
 
-        <Marker position={center} icon={cityIcon}>
-            <Popup>
-                {city.name}, {city.country}
-            </Popup>
-        </Marker>
+            <FitRoute positions={routePositions} city={city} defaultCenter={defaultCenter} />
 
-        {routePositions.length > 1 && (
-        <Polyline
-            positions={routePositions}
-            pathOptions={{
-                color: '#414f85',
-                weight: 2,
-                opacity: 0.9,
-                dashArray: '10, 6',
-                lineCap: 'round',
-                lineJoin: 'round'
-            }}
-        />
-        )}
+            {city && (
+                <Marker position={[city.lat, city.lng]} icon={cityIcon}>
+                    <Popup>{city.name}, {city.country}</Popup>
+                </Marker>
+            )}
 
-        {selectedAttractions.map((a, index) =>
-        a.lat !== null && a.lng !== null ? (
-            <Marker
-                key={attractionKey(a)}
-                position={[a.lat, a.lng]}
-                icon={attractionIcon(index)}
-            >
-            <Popup>
-                <strong>{a.name}</strong>
-                <br />
-                Category: {a.category}
-                <br />
-                Fee: {a.fee || 'Free'}
-                <br />
+            {routePositions.length > 1 && (
+                <Polyline positions={routePositions} pathOptions={{
+                    color: '#414f85',
+                    weight: 2,
+                    opacity: 0.9,
+                    dashArray: '10,6',
+                    lineCap: 'round',
+                    lineJoin: 'round'
+                }} />
+            )}
 
-                <button
-                className="remove-attraction-btn"
-                onClick={() => onRemoveAttraction(attractionKey(a))}
-                >
-                Remove from route
-                </button>
-            </Popup>
-            </Marker>
-        ) : null
-        )}
-    </MapContainer>
+            {selectedAttractions.map((a, index) =>
+                a.lat != null && a.lng != null ? (
+                    <Marker key={attractionKey(a)} position={[a.lat, a.lng]} icon={attractionIcon(index)}>
+                        <Popup>
+                            <strong>{a.name}</strong><br />
+                            Category: {a.category}<br />
+                            Fee: {a.fee || 'Free'}<br />
+                            <button className="remove-attraction-btn" onClick={() => onRemoveAttraction(attractionKey(a))}>
+                                Remove from route
+                            </button>
+                        </Popup>
+                    </Marker>
+                ) : null
+            )}
+        </MapContainer>
 
         <ol className="route-list">
-            {selectedAttractions.map((a) => (
-            <li key={attractionKey(a)}>{a.name}</li>
-            ))}
+            {selectedAttractions.map(a => <li key={attractionKey(a)}>{a.name}</li>)}
         </ol>
-    </div>
+        </div>
     );
 };
 
