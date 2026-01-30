@@ -26,6 +26,7 @@ function App() {
   const [loadingAttractions, setLoadingAttractions] = useState(false);
   const [filterType, setFilterType] = useState('');
   const [currentRouteId, setCurrentRouteId] = useState(null);
+  const [isRouteOptimized, setIsRouteOptimized] = useState(false);
 
 
 // useEffect for sign in / sign out and loading user routes
@@ -102,9 +103,21 @@ const saveRoute = async () => {
   }
 
   try {
+
+    let maxNumber = 0;
+    savedRoutes.forEach(r => {
+      const match = r.name.match(/Route (\d+)/);
+      if (match) {
+        const num = parseInt(match[1], 10);
+        if (num > maxNumber) maxNumber = num;
+      }
+    });
+
+    const routeName = `Route ${maxNumber + 1}`;
+
     const response = await api.post('/routes', {
       user: { id: dbUser.id },
-      name: `Route ${savedRoutes.length + 1}`
+      name: routeName
     });
 
     const newRoute = response.data;
@@ -161,9 +174,27 @@ const saveRoute = async () => {
 
     setSelectedAttractions([...optimizedAttractions]);
 
+    setCurrentRouteId(null);
+    setIsRouteOptimized(true);
+
   } catch (err) {
     console.error('Optimize error:', err);
     alert('Failed to optimize route');
+  }
+};
+
+const handleCityLoaded = (city) => {
+
+  if (isRouteOptimized) {
+    setSelectedAttractions([]);
+    setIsRouteOptimized(false);
+    setCurrentRouteId(null);
+  }
+
+  setCurrentCity(city);
+
+  if (city?.name) {
+    loadAttractions(city.name, filterType);
   }
 };
 
@@ -199,11 +230,8 @@ const saveRoute = async () => {
 
       <CitySearch
         filterType={filterType}
-        setFilterType={setFilterType} 
-        onCityLoaded={(city) => {
-          setCurrentCity(city);
-          if (city?.name) loadAttractions(city.name, filterType);
-        }} 
+        setFilterType={setFilterType}
+        onCityLoaded={handleCityLoaded}
       />
 
       <div className='main-content'>
