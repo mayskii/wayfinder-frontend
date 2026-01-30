@@ -34,13 +34,13 @@ const FitRoute = ({ positions, city, defaultCenter }) => {
 
     useEffect(() => {
         if (positions.length > 0) {
-            // Есть выбранные аттракционы → fitBounds по маршруту
+            
             map.fitBounds(positions, { padding: [40, 40] });
         } else if (city?.lat != null && city?.lng != null) {
-            // Есть город → центр на город и чуть ближе
-            map.setView([city.lat, city.lng], 10); // 10 — ближе, чем 2
+
+            map.setView([city.lat, city.lng], 10);
         } else {
-            // Ни города, ни маршрута → весь мир
+            
             map.setView(defaultCenter, 2);
         }
     }, [positions, city, defaultCenter, map]);

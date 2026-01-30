@@ -25,43 +25,39 @@ function App() {
   const [showSignIn, setShowSignIn] = useState(false);
   const [loadingAttractions, setLoadingAttractions] = useState(false);
   const [filterType, setFilterType] = useState('');
+  const [currentRouteId, setCurrentRouteId] = useState(null);
 
 
-// Firebase  -->  dbUser from back
+// useEffect for sign in / sign out and loading user routes
   useEffect(() => {
-    const registerOrGetUser = async () => {
-      if (!user) return;
+    const initUser = async () => {
+      if (!user) {
+        setDbUser(null);
+        setSavedRoutes([]);
+        setSelectedAttractions([]);
+        return;
+      }
 
       try {
         const response = await api.post('/users/create-or-get', {
           email: user.email,
-          name: user.displayName || "Unknown"
+          name: user.displayName || 'Unknown',
         });
-        setDbUser(response.data);
-        console.log("Backend user:", response.data);
+        const dbUserData = response.data;
+        setDbUser(dbUserData);
+
+        // user's saved routes
+        const routesResp = await api.get(`/routes/by-user/${dbUserData.id}`);
+        setSavedRoutes(routesResp.data);
+
+        console.log('Backend user and routes loaded:', dbUserData, routesResp.data);
       } catch (err) {
-        console.error("Error registering user:", err);
+        console.error('Error initializing user:', err);
       }
     };
-    registerOrGetUser();
+
+    initUser();
   }, [user]);
-
-//
-useEffect(() => {
-  if (!dbUser) return;
-
-  const loadRoutes = async () => {
-    try {
-      const response = await api.get(`/routes/by-user/${dbUser.id}`);
-      setSavedRoutes(response.data);
-    } catch (err) {
-      console.error('Error loading routes:', err);
-    }
-  };
-
-  loadRoutes();
-}, [dbUser]);
-
 
 // useEffect for filtering
   useEffect(() => {
@@ -97,7 +93,6 @@ useEffect(() => {
     prev.filter(a => attractionKey(a) !== key)
   );
 };
-
 
 // save route
 const saveRoute = async () => {
@@ -136,35 +131,41 @@ const saveRoute = async () => {
 // optimization with save
   const optimizeRoute = async () => {
 
-    if (!user) {
+  if (!user) {
     setShowSignIn(true);
     return;
   }
 
-    if (!dbUser) {
-      alert('Please wait.....');
-      return;
-    }
+  if (!dbUser) {
+    alert('Please wait...');
+    return;
+  }
 
-    let lastRouteId = savedRoutes.length > 0
-      ? savedRoutes[savedRoutes.length - 1].id
-      : null;
+  try {
+    let routeId = currentRouteId;
 
-    if (!lastRouteId) {
+    if (!routeId) {
       const saved = await saveRoute();
-      if (!saved) return;
-      lastRouteId = saved.id;
+      if (!saved?.id) return;
+      routeId = saved.id;
+      setCurrentRouteId(routeId);
     }
 
-    try {
-      const response = await api.post(`/route-attractions/optimize/${lastRouteId}`);
-      setSelectedAttractions(response.data.map(ra => ra.attraction));
-      alert('Route optimized!');
-    } catch (err) {
-      console.error('Error optimize route:', err);
-      alert('Failed to optimize the route.');
-    }
-  };
+    const response = await api.post(
+      `/route-attractions/optimize/${routeId}`
+    );
+
+    const optimizedAttractions = response.data
+      .sort((a, b) => a.position - b.position)
+      .map(ra => ra.attraction);
+
+    setSelectedAttractions([...optimizedAttractions]);
+
+  } catch (err) {
+    console.error('Optimize error:', err);
+    alert('Failed to optimize route');
+  }
+};
 
 
   // load route
