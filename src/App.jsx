@@ -210,6 +210,7 @@ const saveRoute = async () => {
           city={currentCity}
           selectedAttractions={selectedAttractions}
           onRemoveAttraction={handleRemoveAttraction}
+          defaultCenter={[20, 0]}
           />
 
         <Sidebar 
