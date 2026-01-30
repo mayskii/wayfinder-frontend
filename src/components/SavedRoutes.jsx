@@ -18,6 +18,8 @@ const SavedRoutes = ({ routes,  loadRoute, deleteRoute }) => {
 
 SavedRoutes.propTypes = {
     routes: PropTypes.array.isRequired,
+    loadRoute: PropTypes.func.isRequired,
+    deleteRoute: PropTypes.func.isRequired,
 };
 
 export default SavedRoutes;
