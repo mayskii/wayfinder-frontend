@@ -1,28 +1,48 @@
+import './CitySearch.css';
 import { useState } from 'react';
 import api from '../api';
 
 const CitySearch = ({ filterType, setFilterType, onCityLoaded }) => {
 
     const [query, setQuery] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
     const handleSearch = async () => {
-    if (!query) return;
-    try {
-        const response = await api.get('/cities/lookup', {
-        params: { name: query }
-        });
-        let city = response.data;
-
-        if (filterType && city.attractions) {
-        city.attractions = city.attractions.filter(a => a.category === filterType);
+        
+        setErrorMessage(''); 
+        
+        if (!query.trim()) {
+            setErrorMessage('Please enter a city name');
+            return;
         }
 
-        onCityLoaded(city);
-    } catch (error) {
-        console.error('City search error:', error);
-        alert('City not found or server error');
-    }
-    };
+        try {
+            const response = await api.get('/cities/lookup', {
+            params: { name: query }
+            });
+            let city = response.data;
+
+            if (!city || !city.name) {
+                setErrorMessage('City not found. Please try another name.');
+                return;
+            }
+
+
+            if (filterType && city.attractions) {
+            city.attractions = city.attractions.filter(a => a.category === filterType);
+            }
+
+            onCityLoaded(city);
+        } catch (error) {
+            console.error('City search error:', error);
+            
+            if (error.response?.status === 404) {
+                setErrorMessage('City not found. Please try another name.');
+            } else {
+                setErrorMessage('Server error. Please try again later.');
+            }
+        }
+        };
 
     return(
         <div className='city-search'>
@@ -39,6 +59,10 @@ const CitySearch = ({ filterType, setFilterType, onCityLoaded }) => {
                 <option value='gallery'>Gallery</option>
             </select>
             <button onClick={handleSearch}>Search</button>
+
+            {errorMessage && (
+                <div className="error-message">{errorMessage}</div>
+            )}
         </div>
     );
 };

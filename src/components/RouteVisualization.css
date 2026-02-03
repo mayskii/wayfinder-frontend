@@ -15,6 +15,25 @@
     text-align: center;
 }
 
+.route-visualization.expanded {
+    position: fixed;
+    top: 60px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    z-index: 999;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.route-visualization.expanded .route-map {
+    height: 100vh;
+    width: 100%;
+}
+
 .route-map {
     width: 100%;
     height: 400px;
