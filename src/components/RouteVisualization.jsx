@@ -48,23 +48,28 @@ const FitRoute = ({ positions, city, defaultCenter }) => {
     return null;
 };
 
-const RouteVisualization = ({ selectedAttractions, city, onRemoveAttraction, defaultCenter }) => {
+const RouteVisualization = ({ selectedAttractions, city, onRemoveAttraction, defaultCenter, isMapExpanded, toggleMapExpand }) => {
     const routePositions = selectedAttractions
         .filter(a => a.lat != null && a.lng != null)
         .map(a => [a.lat, a.lng]);
 
     return (
-        <div className="route-visualization">
-        <div>
-            <h3>Route Visualization</h3>
-            <p>
-            {city
-                ? `City: ${city.name}, ${city.country}`
-                : 'Please select a city to visualize the route'}
-            </p>
-        </div>
+        <div className={`route-visualization ${isMapExpanded ? 'expanded' : ''}`}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                <h3>Route Visualization</h3>
+                <button onClick={toggleMapExpand}>
+                    {isMapExpanded ? 'Collapse Map' : 'Expand Map'}
+                </button>
+            </div>
+            <p>{city ? `City: ${city.name}, ${city.country}` : 'Please select a city to visualize the route'}</p>
 
-        <MapContainer className="route-map" center={defaultCenter} zoom={2}>
+
+        <MapContainer 
+            className="route-map" 
+            center={defaultCenter} 
+            zoom={2}
+            key={selectedAttractions.length + (isMapExpanded ? 'expanded' : 'collapsed')}
+            >
             <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'

@@ -27,6 +27,7 @@ function App() {
   const [filterType, setFilterType] = useState('');
   const [currentRouteId, setCurrentRouteId] = useState(null);
   const [isRouteOptimized, setIsRouteOptimized] = useState(false);
+  const [isMapExpanded, setIsMapExpanded] = useState(false);
 
 
 // useEffect for sign in / sign out and loading user routes
@@ -240,6 +241,8 @@ const handleCityLoaded = (city) => {
           selectedAttractions={selectedAttractions}
           onRemoveAttraction={handleRemoveAttraction}
           defaultCenter={[20, 0]}
+          isMapExpanded={isMapExpanded}
+          toggleMapExpand={() => setIsMapExpanded(prev => !prev)}
           />
 
         <Sidebar 
