@@ -22,13 +22,39 @@ function App() {
   const [attractions, setAttractions] = useState([]);
   const [selectedAttractions, setSelectedAttractions] = useState([]);
   const [savedRoutes, setSavedRoutes] = useState([]);
+
   const [showSignIn, setShowSignIn] = useState(false);
   const [loadingAttractions, setLoadingAttractions] = useState(false);
   const [filterType, setFilterType] = useState('');
+
   const [currentRouteId, setCurrentRouteId] = useState(null);
   const [isRouteOptimized, setIsRouteOptimized] = useState(false);
   const [isMapExpanded, setIsMapExpanded] = useState(false);
 
+  const [message, setMessage] = useState(null);
+
+  const [showSaveModal, setShowSaveModal] = useState(false);
+  const [routeNameDraft, setRouteNameDraft] = useState('');
+
+
+// message for save and optimize route
+  const showMessage = (text) => {
+    setMessage(text);
+    setTimeout(() => setMessage(null), 2500);
+  };
+
+// generator names
+  const generateRouteName = (city) => {
+    const templates = [
+    `Perfect day in ${city}`,
+    `Romantic walk through ${city}`,
+    `${city} highlights`,
+    `Hidden gems of ${city}`,
+    `My ${city} adventure`
+  ];
+
+  return templates[Math.floor(Math.random() * templates.length)];
+};
 
 // useEffect for sign in / sign out and loading user routes
   useEffect(() => {
@@ -97,50 +123,45 @@ function App() {
 };
 
 // save route
-const saveRoute = async () => {
-  if (!dbUser) {
-    setShowSignIn(true);
-    return;
-  }
 
-  try {
-
-    let maxNumber = 0;
-    savedRoutes.forEach(r => {
-      const match = r.name.match(/Route (\d+)/);
-      if (match) {
-        const num = parseInt(match[1], 10);
-        if (num > maxNumber) maxNumber = num;
-      }
-    });
-
-    const routeName = `Route ${maxNumber + 1}`;
-
-    const response = await api.post('/routes', {
-      user: { id: dbUser.id },
-      name: routeName
-    });
-
-    const newRoute = response.data;
-
-    for (let attraction of selectedAttractions) {
-      await api.post('/route-attractions', {
-        route: { id: newRoute.id },
-        attraction: { id: attraction.id }
-      });
+const openSaveRouteModal = () => {
+    if (!dbUser) {
+      setShowSignIn(true);
+      return;
     }
 
-    setSavedRoutes(prev => [...prev, newRoute]);
-    setSelectedAttractions([]);
+    const suggested = generateRouteName(currentCity?.name || 'City');
+    setRouteNameDraft(suggested);
+    setShowSaveModal(true);
+  };
 
-    alert('Route saved!');
-    return newRoute;
+  const saveRoute = async (routeName) => {
+    if (!dbUser) return null;
 
-  } catch (err) {
-    console.error('Error saving route:', err);
-    return null;
-  }
-};
+    try {
+      const response = await api.post('/routes', {
+        user: { id: dbUser.id },
+        name: routeName
+      });
+
+      const newRoute = response.data;
+
+      for (let attraction of selectedAttractions) {
+        await api.post('/route-attractions', {
+          route: { id: newRoute.id },
+          attraction: { id: attraction.id }
+        });
+      }
+
+      setSavedRoutes(prev => [...prev, newRoute]);
+      setSelectedAttractions([]);
+
+      return newRoute;
+    } catch (err) {
+      console.error('Error saving route:', err);
+      return null;
+    }
+  };
 
 // optimization with save
   const optimizeRoute = async () => {
@@ -150,17 +171,17 @@ const saveRoute = async () => {
     return;
   }
 
-  if (!dbUser) {
-    alert('Please wait...');
-    return;
-  }
+  if (!dbUser) return;
 
   try {
     let routeId = currentRouteId;
 
     if (!routeId) {
-      const saved = await saveRoute();
+      const saved = await saveRoute(
+          generateRouteName(currentCity?.name || 'City')
+        );
       if (!saved?.id) return;
+
       routeId = saved.id;
       setCurrentRouteId(routeId);
     }
@@ -178,9 +199,10 @@ const saveRoute = async () => {
     setCurrentRouteId(null);
     setIsRouteOptimized(true);
 
+    showMessage('💫 Route optimized');
+
   } catch (err) {
     console.error('Optimize error:', err);
-    alert('Failed to optimize route');
   }
 };
 
@@ -198,7 +220,6 @@ const handleCityLoaded = (city) => {
     loadAttractions(city.name, filterType);
   }
 };
-
 
   // load route
   const loadRoute = async (route) => {
@@ -225,9 +246,42 @@ const handleCityLoaded = (city) => {
 };
 
   return (
-    <div className='app-container'>
+    <div className="app-container">
       <Header />
+
+      {message && <div className="toast">{message}</div>}
+
       {showSignIn && <SignInModal onClose={() => setShowSignIn(false)} />}
+
+      {showSaveModal && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h3>Save route</h3>
+
+            <input
+              type="text"
+              value={routeNameDraft}
+              onChange={(e) => setRouteNameDraft(e.target.value)}
+            />
+
+            <div className="modal-actions">
+              <button onClick={() => setShowSaveModal(false)}>
+                Cancel
+              </button>
+
+              <button
+                onClick={async () => {
+                  await saveRoute(routeNameDraft);
+                  setShowSaveModal(false);
+                  showMessage('✨ Route saved');
+                }}
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <CitySearch
         filterType={filterType}
@@ -235,7 +289,7 @@ const handleCityLoaded = (city) => {
         onCityLoaded={handleCityLoaded}
       />
 
-      <div className='main-content'>
+      <div className="main-content">
         <RouteVisualization
           city={currentCity}
           selectedAttractions={selectedAttractions}
@@ -243,29 +297,31 @@ const handleCityLoaded = (city) => {
           defaultCenter={[20, 0]}
           isMapExpanded={isMapExpanded}
           toggleMapExpand={() => setIsMapExpanded(prev => !prev)}
-          />
+        />
 
-        <Sidebar 
+        <Sidebar
           attractions={attractions}
           selectedAttractions={selectedAttractions}
           setSelectedAttractions={setSelectedAttractions}
           optimizeRoute={optimizeRoute}
-          saveRoute={saveRoute}
+          saveRoute={openSaveRouteModal}
           user={user}
           showSignInModal={() => setShowSignIn(true)}
           loading={loadingAttractions}
         />
       </div>
 
-        <SavedRoutes
-          user={user}
-          routes={savedRoutes}
-          loadRoute={loadRoute}
-          deleteRoute={deleteRoute}
-          />
-        <Footer />
+      <SavedRoutes
+        user={user}
+        routes={savedRoutes}
+        loadRoute={loadRoute}
+        deleteRoute={deleteRoute}
+      />
+
+      <Footer />
     </div>
-  )
+  );
+
 }
 
 export default App
