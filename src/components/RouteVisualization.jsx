@@ -112,9 +112,9 @@ const RouteVisualization = ({ selectedAttractions, city, onRemoveAttraction, def
             )}
         </MapContainer>
 
-        <ol className="route-list">
+        {/* <ol className="route-list">
             {selectedAttractions.map(a => <li key={attractionKey(a)}>{a.name}</li>)}
-        </ol>
+        </ol> */}
         </div>
     );
 };

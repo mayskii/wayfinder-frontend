@@ -4,21 +4,23 @@ import RoutePreview from './RoutePreview';
 
 const Sidebar = ({ attractions, selectedAttractions, setSelectedAttractions, optimizeRoute, saveRoute, user,  showSignInModal, loading}) => {
     return (
-    <aside className='sidebar'>
+    <>
+        <div className='sidebar'>
         <AttractionList 
             attractions={attractions}
             selectedAttractions={selectedAttractions}
             setSelectedAttractions={setSelectedAttractions}
             loading={loading}
         />
-        <RoutePreview selectedAttractions={selectedAttractions}/>
         <RouteControls  
             optimizeRoute={optimizeRoute}
             saveRoute={saveRoute}
             user={user}
             showSignInModal={showSignInModal}
             />
-    </aside>
+        </div>
+        <RoutePreview selectedAttractions={selectedAttractions}/>
+    </>
     );
 }
 

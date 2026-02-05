@@ -49,7 +49,23 @@ function App() {
     `Romantic walk through ${city}`,
     `${city} highlights`,
     `Hidden gems of ${city}`,
-    `My ${city} adventure`
+    `My ${city} adventure`,
+    `${city} in a day`,
+    `Exploring ${city}`,
+    `Best spots in ${city}`,
+    `Weekend in ${city}`,
+    `${city} bucket list`,
+    `Must-see places in ${city}`,
+    `Discovering ${city}`,
+    `${city} city tour`,
+    `A taste of ${city}`,
+    `${city} essentials`,
+    `Iconic ${city}`,
+    `${city} sightseeing route`,
+    `Walking through ${city}`,
+    `${city} travel guide`,
+    `Top attractions in ${city}`,
+    `Local favorites in ${city}`,
   ];
 
   return templates[Math.floor(Math.random() * templates.length)];
@@ -358,6 +374,7 @@ const handleCityLoaded = (city) => {
         routes={savedRoutes}
         loadRoute={loadRoute}
         deleteRoute={deleteRoute}
+        isAuthenticated={user !== null}
       />
 
       <Footer />

@@ -93,7 +93,7 @@ html, body, #root {
 
 .main-content {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 3fr 1fr;
   gap: 1rem;
   padding: 1rem;
   width: 100%;
@@ -149,7 +149,6 @@ html, body, #root {
   flex-direction: column;
   border-radius: 16px;
   padding: 1rem;
-  min-height: 400px;
   background-color: #fff;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }

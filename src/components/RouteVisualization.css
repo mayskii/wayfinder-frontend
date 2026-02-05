@@ -5,20 +5,7 @@
     min-height: 400px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border-radius: 8px;
-    background-color: #fff;
-}
-
-.route-visualization {
-    flex: 2;
-    border: 1px solid #ddd;
-    padding: 1rem;
-    min-height: 400px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     border-radius: 8px;
     background-color: #fff;
@@ -44,10 +31,19 @@
     border-radius: 8px;
     margin-bottom: 1rem;
     z-index: 1000;
+    flex-grow: 1;
 }
 
 .route-visualization.expanded .route-map {
     height: calc(100vh - 100px);
+}
+
+.route-visualization p {
+    margin: 0 0 10px 0;
+    text-align: center;
+    font-size: 16px;
+    color: #333;
+    z-index: 1000;
 }
 
 .map-overlay {
@@ -59,6 +55,7 @@
     background: rgba(0, 0, 0, 0.5);
     z-index: 998;
 }
+
 .route-map .leaflet-popup-content {
     padding: 12px;
     font-size: 14px;
@@ -116,7 +113,7 @@
 
 .route-visualization button {
     position: absolute;
-    top: 55px;
+    top: 60px;
     right: 30px;
     z-index: 1001;
     background-color: #ff5722;
@@ -129,3 +126,4 @@
 .route-visualization button:hover {
     background-color: #e64a19;
 }
+
