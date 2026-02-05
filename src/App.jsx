@@ -32,7 +32,6 @@ function App() {
   const [isMapExpanded, setIsMapExpanded] = useState(false);
 
   const [message, setMessage] = useState(null);
-
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [routeNameDraft, setRouteNameDraft] = useState('');
 
@@ -89,19 +88,25 @@ function App() {
 
 // useEffect for filtering
   useEffect(() => {
-    if (currentCity?.name) {
-      loadAttractions(currentCity.name, filterType);
-    }
-  }, [filterType, currentCity]);
+  if (currentCity) {
+    const cityName = typeof currentCity === 'string' ? currentCity : currentCity.name;
+    loadAttractions(cityName, filterType);
+  }
+}, [filterType, currentCity]);
+
 
 
 // attractions from back
-  const loadAttractions = async (cityName, filterType) => {
+  const loadAttractions = async (city, filterType) => {
+  if (!city) return;
+
+  const cityName = typeof city === 'string' ? city : city.name;
+
   setLoadingAttractions(true);
   try {
-    const response = await api.get(`/attractions/from-osm?cityName=${cityName}`);
+    const response = await api.get(`/attractions/from-osm?cityName=${encodeURIComponent(cityName)}`);
     let data = response.data;
-    
+
     if (filterType) {
       data = data.filter(a => a.category === filterType);
     }
@@ -135,14 +140,22 @@ const openSaveRouteModal = () => {
     setShowSaveModal(true);
   };
 
-  const saveRoute = async (routeName) => {
+    const saveRoute = async (routeName, isTemp = false) => {
     if (!dbUser) return null;
 
     try {
-      const response = await api.post('/routes', {
-        user: { id: dbUser.id },
-        name: routeName
-      });
+    const response = await api.post('/routes', {
+      user: { id: dbUser.id },
+      name: routeName,
+      city: currentCity
+      ? {
+        name: currentCity.name,
+        country: currentCity.country,
+        lat: currentCity.lat,
+        lng: currentCity.lng,
+      }
+    : null,
+});
 
       const newRoute = response.data;
 
@@ -153,8 +166,11 @@ const openSaveRouteModal = () => {
         });
       }
 
-      setSavedRoutes(prev => [...prev, newRoute]);
-      setSelectedAttractions([]);
+      if (!isTemp) {
+        setSavedRoutes(prev => [...prev, newRoute]);
+        setSelectedAttractions([]);
+        showMessage('✨ Route saved');
+      }
 
       return newRoute;
     } catch (err) {
@@ -163,50 +179,60 @@ const openSaveRouteModal = () => {
     }
   };
 
-// optimization with save
+  const syncRouteAttractions = async (routeId, attractions) => {
+
+    await api.delete(`/route-attractions/by-route/${routeId}`);
+
+    for (let attraction of attractions) {
+      await api.post('/route-attractions', {
+        route: { id: routeId },
+        attraction: { id: attraction.id }
+      });
+    }
+  };
+
+// optimization with temp save
   const optimizeRoute = async () => {
-
-  if (!user) {
-    setShowSignIn(true);
-    return;
-  }
-
-  if (!dbUser) return;
-
-  try {
-    let routeId = currentRouteId;
-
-    if (!routeId) {
-      const saved = await saveRoute(
-          generateRouteName(currentCity?.name || 'City')
-        );
-      if (!saved?.id) return;
-
-      routeId = saved.id;
-      setCurrentRouteId(routeId);
+    if (!user) {
+      setShowSignIn(true);
+      return;
     }
 
-    const response = await api.post(
-      `/route-attractions/optimize/${routeId}`
-    );
+    if (!dbUser) return;
 
-    const optimizedAttractions = response.data
-      .sort((a, b) => a.position - b.position)
-      .map(ra => ra.attraction);
+    try {
+      let routeId = currentRouteId;
 
-    setSelectedAttractions([...optimizedAttractions]);
+      if (!routeId) {
+        const saved = await saveRoute(
+          generateRouteName(currentCity?.name || 'City'),
+          true
+        );
+        if (!saved?.id) return;
 
-    setCurrentRouteId(null);
-    setIsRouteOptimized(true);
+        routeId = saved.id;
+        setCurrentRouteId(routeId);
+      }
+      await syncRouteAttractions(routeId, selectedAttractions);
 
-    showMessage('💫 Route optimized');
+      const response = await api.post(`/route-attractions/optimize/${routeId}`);
 
-  } catch (err) {
-    console.error('Optimize error:', err);
-  }
-};
+      const optimizedAttractions = response.data
+        .sort((a, b) => a.position - b.position)
+        .map(ra => ra.attraction);
+
+      setSelectedAttractions(optimizedAttractions);
+      setIsRouteOptimized(true);
+
+      showMessage('💫 Route optimized');
+
+    } catch (err) {
+      console.error('Optimize error:', err);
+    }
+  };
 
 const handleCityLoaded = (city) => {
+  console.log('Current city loaded from CitySearch:', city);
 
   if (isRouteOptimized) {
     setSelectedAttractions([]);
@@ -223,17 +249,33 @@ const handleCityLoaded = (city) => {
 
   // load route
   const loadRoute = async (route) => {
-    try {
-    const response = await api.get(
-      `/route-attractions/by-route/${route.id}`
-    );
+  try {
+    const response = await api.get(`/route-attractions/by-route/${route.id}`);
+    const routeAttractions = response.data;
 
-    const attractions = response.data.map(ra => ra.attraction);
+    const attractions = routeAttractions.map(ra => ra.attraction);
     setSelectedAttractions(attractions);
+
+    if (attractions.length > 0) {
+      const cityData = attractions[0].city;
+
+      if (cityData) {
+        const city = {
+          name: cityData.name,
+          country: cityData.country,
+          lat: cityData.lat,
+          lng: cityData.lng,
+        };
+
+        console.log('Loaded city from route:', city);
+        setCurrentCity(city);
+      }
+    }
+
   } catch (err) {
     console.error('Error loading route:', err);
-  };
-  };
+  }
+};
 
   // delete route
   const deleteRoute = async (routeId) => {

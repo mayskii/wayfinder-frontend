@@ -56,13 +56,13 @@ const RouteVisualization = ({ selectedAttractions, city, onRemoveAttraction, def
     return (
         <div className={`route-visualization ${isMapExpanded ? 'expanded' : ''}`}>
             <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                <h3>Route Visualization</h3>
                 <button onClick={toggleMapExpand}>
                     {isMapExpanded ? 'Collapse Map' : 'Expand Map'}
                 </button>
             </div>
-            <p>{city ? `City: ${city.name}, ${city.country}` : 'Please select a city to visualize the route'}</p>
-
+            <p>
+                {city ? `City: ${city.name || 'Unknown'}, ${city.country || ''}` : 'Please select a city to visualize the route'}
+            </p>
 
         <MapContainer 
             className="route-map" 
