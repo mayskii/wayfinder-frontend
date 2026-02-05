@@ -55,6 +55,8 @@ const RouteVisualization = ({ selectedAttractions, city, onRemoveAttraction, def
 
     return (
         <div className={`route-visualization ${isMapExpanded ? 'expanded' : ''}`}>
+            {isMapExpanded && <div className="map-overlay" onClick={toggleMapExpand}></div>}
+
             <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
                 <button onClick={toggleMapExpand}>
                     {isMapExpanded ? 'Collapse Map' : 'Expand Map'}
@@ -85,8 +87,8 @@ const RouteVisualization = ({ selectedAttractions, city, onRemoveAttraction, def
 
             {routePositions.length > 1 && (
                 <Polyline positions={routePositions} pathOptions={{
-                    color: '#414f85',
-                    weight: 2,
+                    color: '#2f59c3ff',
+                    weight: 3,
                     opacity: 0.9,
                     dashArray: '10,6',
                     lineCap: 'round',
