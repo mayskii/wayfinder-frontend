@@ -70,9 +70,6 @@ const AttractionList = ({ attractions, selectedAttractions, setSelectedAttractio
         </div>
 
         <div className="buttons">
-            <button onClick={() => setSelectedAttractions(validAttractions)}>
-                Select All
-            </button>
 
             <button onClick={() => setSelectedAttractions([])}>
                 Deselect All

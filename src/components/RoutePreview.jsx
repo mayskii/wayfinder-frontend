@@ -9,8 +9,8 @@ const RoutePreview = ({ selectedAttractions }) => {
         {selectedAttractions.length === 0 ? ( <p>No attractions selected</p>
         ) : (
         <ol>
-            {selectedAttractions.map((attraction) => (
-                <li key={attraction.osm_id}>
+            {selectedAttractions.map((attraction, index) => (
+                <li key={attraction.osm_id || attraction.id || index}>
                 {attraction.name}
                 {attraction.distance_km && ` (${attraction.distance_km} km)`}
             </li>
