@@ -6,7 +6,7 @@ import CitySearch from './components/CitySearch';
 import RouteVisualization from './components/RouteVisualization';
 import Sidebar from './components/Sidebar';
 import Footer from './components/Footer';
-import SavedRoutes from './components/SavedRoutes';
+import RoutePreview from './components/RoutePreview';
 import { useAuth } from './auth/useAuth';
 import SignInModal from './components/SingInModal';
 import { attractionKey } from './utils';
@@ -46,7 +46,7 @@ function App() {
   const generateRouteName = (city) => {
     const templates = [
     `Perfect day in ${city}`,
-    `Romantic walk through ${city}`,
+    `Walk through ${city}`,
     `${city} highlights`,
     `Hidden gems of ${city}`,
     `My ${city} adventure`,
@@ -61,10 +61,10 @@ function App() {
     `A taste of ${city}`,
     `${city} essentials`,
     `Iconic ${city}`,
-    `${city} sightseeing route`,
+    `${city} route`,
     `Walking through ${city}`,
     `${city} travel guide`,
-    `Top attractions in ${city}`,
+    `Top in ${city}`,
     `Local favorites in ${city}`,
   ];
 
@@ -358,25 +358,24 @@ const handleCityLoaded = (city) => {
         />
 
         <Sidebar
-          attractions={attractions}
-          selectedAttractions={selectedAttractions}
-          setSelectedAttractions={setSelectedAttractions}
-          optimizeRoute={optimizeRoute}
-          saveRoute={openSaveRouteModal}
-          user={user}
-          showSignInModal={() => setShowSignIn(true)}
-          loading={loadingAttractions}
-        />
-      </div>
-
-      <SavedRoutes
+        attractions={attractions}
+        selectedAttractions={selectedAttractions}
+        setSelectedAttractions={setSelectedAttractions}
+        optimizeRoute={optimizeRoute}
+        saveRoute={openSaveRouteModal}
         user={user}
+        showSignInModal={() => setShowSignIn(true)}
+        loading={loadingAttractions}
         routes={savedRoutes}
+        setRoutes={setSavedRoutes} 
         loadRoute={loadRoute}
         deleteRoute={deleteRoute}
-        isAuthenticated={user !== null}
-      />
-
+        />
+        
+      <RoutePreview 
+      selectedAttractions={selectedAttractions}
+      isAuthenticated={!!user} />
+      </div>
       <Footer />
     </div>
   );

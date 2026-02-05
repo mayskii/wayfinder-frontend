@@ -1,7 +1,10 @@
 import PropTypes from 'prop-types';
 import './RoutePreview.css';
 
-const RoutePreview = ({ selectedAttractions }) => {
+const RoutePreview = ({ selectedAttractions, isAuthenticated  }) => {
+
+    if (!isAuthenticated) return null;
+    
     return (
         <div className="route-preview">
             <h4>Route Preview</h4>

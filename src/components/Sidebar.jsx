@@ -1,27 +1,66 @@
+import PropTypes from 'prop-types';
 import AttractionList from './AttractionList';
 import RouteControls from './RouteControls';
-import RoutePreview from './RoutePreview';
+import SavedRoutes from './SavedRoutes';
 
-const Sidebar = ({ attractions, selectedAttractions, setSelectedAttractions, optimizeRoute, saveRoute, user,  showSignInModal, loading}) => {
+const Sidebar = ({
+    attractions,
+    selectedAttractions,
+    setSelectedAttractions,
+    optimizeRoute,
+    saveRoute,
+    user,
+    showSignInModal,
+    loading,
+    routes,
+    setRoutes,
+    loadRoute,
+    deleteRoute
+}) => {
     return (
-    <>
-        <div className='sidebar'>
+    <div className="sidebar">
+
         <AttractionList 
             attractions={attractions}
             selectedAttractions={selectedAttractions}
             setSelectedAttractions={setSelectedAttractions}
             loading={loading}
         />
+        
         <RouteControls  
             optimizeRoute={optimizeRoute}
             saveRoute={saveRoute}
             user={user}
             showSignInModal={showSignInModal}
-            />
-        </div>
-        <RoutePreview selectedAttractions={selectedAttractions}/>
-    </>
-    );
-}
+        />
 
-export default Sidebar
+
+        {user && (
+        <SavedRoutes
+            routes={routes}
+            setRoutes={setRoutes}
+            loadRoute={loadRoute}
+            deleteRoute={deleteRoute}
+            isAuthenticated={user !== null}
+        />
+        )}
+    </div>
+    );
+};
+
+Sidebar.propTypes = {
+    attractions: PropTypes.array.isRequired,
+    selectedAttractions: PropTypes.array.isRequired,
+    setSelectedAttractions: PropTypes.func.isRequired,
+    optimizeRoute: PropTypes.func.isRequired,
+    saveRoute: PropTypes.func.isRequired,
+    user: PropTypes.object,
+    showSignInModal: PropTypes.func,
+    loading: PropTypes.bool,
+    routes: PropTypes.array.isRequired,
+    loadRoute: PropTypes.func.isRequired,
+    deleteRoute: PropTypes.func.isRequired,
+    setRoutes: PropTypes.func.isRequired,
+};
+
+export default Sidebar;

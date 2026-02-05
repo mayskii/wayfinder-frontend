@@ -149,8 +149,10 @@ html, body, #root {
   flex-direction: column;
   border-radius: 16px;
   padding: 1rem;
-  background-color: #fff;
+  background-color: #fafbff;
+  border: 1px solid #e0e0e0;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  gap: 1rem;
 }
 
 .attraction-list {
@@ -203,8 +205,7 @@ html, body, #root {
 }
 
 .saved-routes {
-  margin-top: 1rem;
-  padding: 0.5rem 1rem;
+  padding: 1rem;
   border-radius: 12px;
   background-color: #fff;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
@@ -283,8 +284,9 @@ html, body, #root {
 
 .toast {
   position: fixed;
-  top: 20px;
-  right: 20px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   background: linear-gradient(135deg, #6a8cff, #8fb6ff);
   color: white;
   padding: 0.8rem 1.2rem;
