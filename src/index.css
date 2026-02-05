@@ -39,22 +39,21 @@ body {
 
 button {
   font-family: var(--font-family);
-  padding: 8px 14px;
+  padding: 9px 14px;
   border-radius: var(--border-radius);
   border: none;
   cursor: pointer;
-  background: linear-gradient(135deg, #4a90e2, #73b3ff);
+  font-size: 0.95rem;
+  background: linear-gradient(135deg, #5a8df3, #8fb6ff);
   color: #fff;
   font-weight: 500;
   transition: all 0.25s ease;
 }
 
 button:hover {
-  background: linear-gradient(135deg, #3a78c2, #5fa0ff);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
-
 
 input,
 select {

@@ -3,6 +3,7 @@ import { useAuth } from '../auth/useAuth';
 import { logOut } from '../auth/authFunctions';
 import SignInModal from './SingInModal';
 import SignUpModal from './SingUpModal';
+import './Header.css';
 
 const Header = () => {
     const { user } = useAuth();
@@ -11,7 +12,7 @@ const Header = () => {
 
     return (
     <header className='header'>
-        <h2>Wayfinder</h2>
+        <h2 className="logo">Wayfinder</h2>
         <div className='auth-buttons'>
         {!user ? (
             <>
