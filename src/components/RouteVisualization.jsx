@@ -100,14 +100,23 @@ const RouteVisualization = ({ selectedAttractions, city, onRemoveAttraction, def
                 a.lat != null && a.lng != null ? (
                     <Marker key={attractionKey(a)} position={[a.lat, a.lng]} icon={attractionIcon(index)}>
                         <Popup>
-                            <strong>{a.name}</strong><br />
-                            Category: {a.category}<br />
-                            Fee: {a.fee || 'Free'}<br />
-                            <button className="remove-attraction-btn" onClick={() => onRemoveAttraction(attractionKey(a))}>
-                                Remove from route
-                            </button>
-                        </Popup>
+  <div className="popup-content">
+    <div className="popup-text">
+      <div className="popup-title">{a.name}</div>
+      <div className="popup-category">Category: {a.category}</div>
+      <div className="popup-fee">Fee: {a.fee || 'Free'}</div>
+    </div>
+
+    <button
+      className="remove-attraction-btn"
+      onClick={() => onRemoveAttraction(attractionKey(a))}
+    >
+      Remove from route
+    </button>
+  </div>
+</Popup>
                     </Marker>
+
                 ) : null
             )}
         </MapContainer>

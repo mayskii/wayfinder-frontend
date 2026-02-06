@@ -15,7 +15,9 @@ const Sidebar = ({
     routes,
     setRoutes,
     loadRoute,
-    deleteRoute
+    deleteRoute,
+    currentPage,
+    setCurrentPage
 }) => {
     return (
     <div className="sidebar">
@@ -25,6 +27,8 @@ const Sidebar = ({
             selectedAttractions={selectedAttractions}
             setSelectedAttractions={setSelectedAttractions}
             loading={loading}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
         />
         
         <RouteControls  

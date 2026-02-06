@@ -7,8 +7,9 @@
     justify-content: flex-start;
     align-items: stretch;
     border-radius: 8px;
-    background-color: #fff;
+    background-color: #fafbff;
     position: relative;
+    min-height: 400px;
 }
 
 .route-visualization.expanded {
@@ -18,10 +19,12 @@
     right: 10px;
     bottom: 10px;
     z-index: 999;
-    background-color: #fff;
+    background-color: #fafbff;
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     padding: 1rem;
+    display: flex;
+    flex-direction: column;
 }
 
 .route-map {
@@ -32,10 +35,12 @@
     min-height: 0;
     position: relative;
     z-index: 2;
+    height: 100%;
 }
 
 .route-visualization.expanded .route-map {
-    height: calc(100vh - 100px);
+    flex: 1 1 auto;
+    min-height: 0;
 }
 
 .route-visualization p {
@@ -54,32 +59,41 @@
 }
 
 .route-map .leaflet-popup-content {
-    padding: 12px;
+    padding: 10px;
     font-size: 14px;
     line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+    white-space: normal;
+    min-width: 170px;
+    max-width: 210px;
+    min-height: 120px;
+    position: relative;
 }
 
-.route-map .leaflet-popup-content strong {
-    display: block;
-    margin-bottom: 6px;
-    font-weight: 600;
-    color: #333;
+.popup-content {
+    display: flex;
+    flex-direction: column;
+    min-height: 120px;
 }
 
-.route-map .leaflet-popup-content button {
-    background-color: #ff5722;
-    border: none;
-    color: white;
-    padding: 6px 10px;
-    border-radius: 4px;
-    font-size: 12px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-top: 8px;
+.popup-title,
+.popup-category,
+.popup-fee {
+    text-align: center;
+    width: 100%;
 }
 
-.route-map .leaflet-popup-content button:hover {
-    background-color: #e64a19;
+.popup-title{
+    font-weight: 900;
+}
+
+.remove-attraction-btn {
+    margin-top: 35px;
+    align-self: center;
+    width: 120px;
+    text-align: center;
+    padding: 5px;
 }
 
 .city-dot {

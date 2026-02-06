@@ -35,6 +35,8 @@ function App() {
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [routeNameDraft, setRouteNameDraft] = useState('');
 
+  const [attractionPage, setAttractionPage] = useState(1);
+
 
 // message for save and optimize route
   const showMessage = (text) => {
@@ -107,6 +109,7 @@ function App() {
   if (currentCity) {
     const cityName = typeof currentCity === 'string' ? currentCity : currentCity.name;
     loadAttractions(cityName, filterType);
+    setAttractionPage(1);
   }
 }, [filterType, currentCity]);
 
@@ -370,7 +373,10 @@ const handleCityLoaded = (city) => {
         setRoutes={setSavedRoutes} 
         loadRoute={loadRoute}
         deleteRoute={deleteRoute}
-        />
+        currentPage={attractionPage}
+        setCurrentPage={setAttractionPage}
+/>
+
         
       <RoutePreview 
       selectedAttractions={selectedAttractions}

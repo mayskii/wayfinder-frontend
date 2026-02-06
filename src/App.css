@@ -95,7 +95,7 @@ html, body, #root {
   flex-direction: column;
   border-radius: 16px;
   padding: 1rem;
-  background-color: #fff;
+  background-color: #fafbff;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
   min-height: 400px;
 }
@@ -107,7 +107,7 @@ html, body, #root {
   right: 10px;
   bottom: 10px;
   z-index: 999;
-  background-color: #fff;
+  background-color: #fafbff;
   border-radius: 16px;
   padding: 1.2rem;
   display: flex;

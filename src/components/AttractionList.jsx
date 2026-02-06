@@ -1,13 +1,19 @@
-import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import './AttractionList.css';
 
-const AttractionList = ({ attractions, selectedAttractions, setSelectedAttractions, pageSize = 5, loading }) => {
+const AttractionList = ({ 
+    attractions, 
+    selectedAttractions, 
+    setSelectedAttractions, 
+    pageSize = 5, 
+    loading,
+    currentPage,
+    setCurrentPage
+}) => {
 
     const validAttractions = attractions.filter(a => a.name && a.name !== "Unknown");
 
-    const [currentPage, setCurrentPage] = useState(1);
     const totalPages = Math.ceil(validAttractions.length / pageSize);
 
     const toggleAttraction = (attraction) => {
@@ -47,11 +53,13 @@ const AttractionList = ({ attractions, selectedAttractions, setSelectedAttractio
                                 <li key={attraction.id}>
                                     <label>
                                         <input
-                                            type="checkbox"
-                                            checked={isChecked}
-                                            onChange={() => toggleAttraction(attraction)}
+                                        type="checkbox"
+                                        checked={isChecked}
+                                        onChange={() => toggleAttraction(attraction)}
                                         />
-                                        {attraction.name} ({attraction.category})
+                                        <span className="attraction-text">
+                                            {attraction.name} ({attraction.category})
+                                        </span>
                                     </label>
                                 </li>
                             );
@@ -94,6 +102,8 @@ AttractionList.propTypes = {
     setSelectedAttractions: PropTypes.func.isRequired,
     pageSize: PropTypes.number,
     loading: PropTypes.bool,
+    currentPage: PropTypes.number.isRequired,
+    setCurrentPage: PropTypes.func.isRequired,
 };
 
 export default AttractionList;
