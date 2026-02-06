@@ -1,0 +1,32 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.9rem 1.5rem;
+    background-color: #fff;
+    border-bottom: 1px solid #e0e0e0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    border-radius: 0 0 12px 12px;
+
+    position: sticky;
+    top: 0;
+    z-index: 1500;
+}
+
+.logo {
+    margin: 0;
+    font-size: 1.7rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #6a8cff, #8fb6ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    letter-spacing: 1px;
+    transition: transform 0.3s ease;
+    cursor: default;
+}
+
+.logo:hover {
+    transform: scale(1.05) rotate(-1deg);
+}

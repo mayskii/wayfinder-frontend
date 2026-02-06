@@ -1,0 +1,80 @@
+.saved-routes {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.saved-routes h4 {
+    font-size: 18px;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.saved-routes ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.saved-routes li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+    width: 100%;
+    min-width: 0;
+    gap: 8px;
+}
+
+.saved-routes li:last-child {
+    border-bottom: none;
+}
+
+.saved-routes .route-name {
+    flex: 1 1 0;
+    min-width: 0;
+    font-size: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+}
+
+.saved-routes button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #3e8e41;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 8px;
+    width: 36px;
+    height: 36px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.saved-routes button svg {
+    width: 18px;
+    height: 18px;
+}
+
+.saved-routes li {
+    cursor: grab;
+    transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.saved-routes li:active {
+    cursor: grabbing;
+}
+
+.saved-routes li.dragging {
+    opacity: 0.5;
+    transform: scale(0.98);
+    background: #eef2ff;
+}

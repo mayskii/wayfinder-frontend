@@ -1,0 +1,18 @@
+.route-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1rem;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+.route-controls h4 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #1f2937;
+}

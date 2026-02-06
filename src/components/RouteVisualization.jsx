@@ -55,6 +55,8 @@ const RouteVisualization = ({ selectedAttractions, city, onRemoveAttraction, def
 
     return (
         <div className={`route-visualization ${isMapExpanded ? 'expanded' : ''}`}>
+            {isMapExpanded && <div className="map-overlay" onClick={toggleMapExpand}></div>}
+
             <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
                 <button onClick={toggleMapExpand}>
                     {isMapExpanded ? 'Collapse Map' : 'Expand Map'}
@@ -85,8 +87,8 @@ const RouteVisualization = ({ selectedAttractions, city, onRemoveAttraction, def
 
             {routePositions.length > 1 && (
                 <Polyline positions={routePositions} pathOptions={{
-                    color: '#414f85',
-                    weight: 2,
+                    color: '#2f59c3ff',
+                    weight: 3,
                     opacity: 0.9,
                     dashArray: '10,6',
                     lineCap: 'round',
@@ -98,21 +100,30 @@ const RouteVisualization = ({ selectedAttractions, city, onRemoveAttraction, def
                 a.lat != null && a.lng != null ? (
                     <Marker key={attractionKey(a)} position={[a.lat, a.lng]} icon={attractionIcon(index)}>
                         <Popup>
-                            <strong>{a.name}</strong><br />
-                            Category: {a.category}<br />
-                            Fee: {a.fee || 'Free'}<br />
-                            <button className="remove-attraction-btn" onClick={() => onRemoveAttraction(attractionKey(a))}>
-                                Remove from route
-                            </button>
-                        </Popup>
+  <div className="popup-content">
+    <div className="popup-text">
+      <div className="popup-title">{a.name}</div>
+      <div className="popup-category">Category: {a.category}</div>
+      <div className="popup-fee">Fee: {a.fee || 'Free'}</div>
+    </div>
+
+    <button
+      className="remove-attraction-btn"
+      onClick={() => onRemoveAttraction(attractionKey(a))}
+    >
+      Remove from route
+    </button>
+  </div>
+</Popup>
                     </Marker>
+
                 ) : null
             )}
         </MapContainer>
 
-        <ol className="route-list">
+        {/* <ol className="route-list">
             {selectedAttractions.map(a => <li key={attractionKey(a)}>{a.name}</li>)}
-        </ol>
+        </ol> */}
         </div>
     );
 };

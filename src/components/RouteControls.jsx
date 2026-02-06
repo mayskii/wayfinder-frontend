@@ -1,3 +1,5 @@
+import './RouteControls.css';
+
 const RouteControls = ({ optimizeRoute, saveRoute, user, showSignInModal }) => {
 
 const handleOptimize = () => {
@@ -20,7 +22,6 @@ const handleSaveRoute = () => {
 
     return (
     <div className='route-controls'>
-        <h4>Route Controls</h4>
 
         <button onClick={handleOptimize}>
             Optimize Route

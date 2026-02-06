@@ -6,7 +6,7 @@ import CitySearch from './components/CitySearch';
 import RouteVisualization from './components/RouteVisualization';
 import Sidebar from './components/Sidebar';
 import Footer from './components/Footer';
-import SavedRoutes from './components/SavedRoutes';
+import RoutePreview from './components/RoutePreview';
 import { useAuth } from './auth/useAuth';
 import SignInModal from './components/SingInModal';
 import { attractionKey } from './utils';
@@ -35,6 +35,8 @@ function App() {
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [routeNameDraft, setRouteNameDraft] = useState('');
 
+  const [attractionPage, setAttractionPage] = useState(1);
+
 
 // message for save and optimize route
   const showMessage = (text) => {
@@ -46,10 +48,26 @@ function App() {
   const generateRouteName = (city) => {
     const templates = [
     `Perfect day in ${city}`,
-    `Romantic walk through ${city}`,
+    `Walk through ${city}`,
     `${city} highlights`,
     `Hidden gems of ${city}`,
-    `My ${city} adventure`
+    `My ${city} adventure`,
+    `${city} in a day`,
+    `Exploring ${city}`,
+    `Best spots in ${city}`,
+    `Weekend in ${city}`,
+    `${city} bucket list`,
+    `Must-see places in ${city}`,
+    `Discovering ${city}`,
+    `${city} city tour`,
+    `A taste of ${city}`,
+    `${city} essentials`,
+    `Iconic ${city}`,
+    `${city} route`,
+    `Walking through ${city}`,
+    `${city} travel guide`,
+    `Top in ${city}`,
+    `Local favorites in ${city}`,
   ];
 
   return templates[Math.floor(Math.random() * templates.length)];
@@ -91,6 +109,7 @@ function App() {
   if (currentCity) {
     const cityName = typeof currentCity === 'string' ? currentCity : currentCity.name;
     loadAttractions(cityName, filterType);
+    setAttractionPage(1);
   }
 }, [filterType, currentCity]);
 
@@ -342,24 +361,27 @@ const handleCityLoaded = (city) => {
         />
 
         <Sidebar
-          attractions={attractions}
-          selectedAttractions={selectedAttractions}
-          setSelectedAttractions={setSelectedAttractions}
-          optimizeRoute={optimizeRoute}
-          saveRoute={openSaveRouteModal}
-          user={user}
-          showSignInModal={() => setShowSignIn(true)}
-          loading={loadingAttractions}
-        />
-      </div>
-
-      <SavedRoutes
+        attractions={attractions}
+        selectedAttractions={selectedAttractions}
+        setSelectedAttractions={setSelectedAttractions}
+        optimizeRoute={optimizeRoute}
+        saveRoute={openSaveRouteModal}
         user={user}
+        showSignInModal={() => setShowSignIn(true)}
+        loading={loadingAttractions}
         routes={savedRoutes}
+        setRoutes={setSavedRoutes} 
         loadRoute={loadRoute}
         deleteRoute={deleteRoute}
-      />
+        currentPage={attractionPage}
+        setCurrentPage={setAttractionPage}
+/>
 
+        
+      <RoutePreview 
+      selectedAttractions={selectedAttractions}
+      isAuthenticated={!!user} />
+      </div>
       <Footer />
     </div>
   );
