@@ -43,6 +43,10 @@ const FitRoute = ({ positions, city, defaultCenter }) => {
             
             map.setView(defaultCenter, 2);
         }
+        setTimeout(() => {
+            map.invalidateSize();
+        }, 0);
+
     }, [positions, city, defaultCenter, map]);
 
     return null;
@@ -58,7 +62,7 @@ const RouteVisualization = ({ selectedAttractions, city, onRemoveAttraction, def
             {isMapExpanded && <div className="map-overlay" onClick={toggleMapExpand}></div>}
 
             <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                <button onClick={toggleMapExpand}>
+                <button onClick={toggleMapExpand} className='expand-map-btn'>
                     {isMapExpanded ? 'Collapse Map' : 'Expand Map'}
                 </button>
             </div>
@@ -87,7 +91,7 @@ const RouteVisualization = ({ selectedAttractions, city, onRemoveAttraction, def
 
             {routePositions.length > 1 && (
                 <Polyline positions={routePositions} pathOptions={{
-                    color: '#2f59c3ff',
+                    color: '#1e3c9e',
                     weight: 3,
                     opacity: 0.9,
                     dashArray: '10,6',
@@ -100,21 +104,20 @@ const RouteVisualization = ({ selectedAttractions, city, onRemoveAttraction, def
                 a.lat != null && a.lng != null ? (
                     <Marker key={attractionKey(a)} position={[a.lat, a.lng]} icon={attractionIcon(index)}>
                         <Popup>
-  <div className="popup-content">
-    <div className="popup-text">
-      <div className="popup-title">{a.name}</div>
-      <div className="popup-category">Category: {a.category}</div>
-      <div className="popup-fee">Fee: {a.fee || 'Free'}</div>
-    </div>
-
-    <button
-      className="remove-attraction-btn"
-      onClick={() => onRemoveAttraction(attractionKey(a))}
-    >
-      Remove from route
-    </button>
-  </div>
-</Popup>
+                            <div className="popup-content">
+                                <div className="popup-text">
+                                    <div className="popup-title">{a.name}</div>
+                                    <div className="popup-category">Category: {a.category}</div>
+                                    <div className="popup-fee">Fee: {a.fee || 'Free'}</div>
+                                </div>
+                                <button
+                                className="remove-attraction-btn"
+                                onClick={() => onRemoveAttraction(attractionKey(a))}
+                                >
+                                    Remove from route
+                                </button>
+                            </div>
+                            </Popup>
                     </Marker>
 
                 ) : null

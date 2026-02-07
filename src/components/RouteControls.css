@@ -1,18 +1,37 @@
 .route-controls {
     display: flex;
-    flex-direction: column;
     gap: 0.6rem;
-    padding: 1rem;
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    border-radius: 6px;
     width: 100%;
+    max-width: 600px;
     margin: 0 auto;
     box-sizing: border-box;
+    font-family: Georgia, "Times New Roman", serif;
 }
 
 .route-controls h4 {
-    margin: 0;
+    margin: 0 0 0.5rem 0;
     font-size: 1.1rem;
-    color: #1f2937;
+    color: #2b2b2b;
+    text-align: center;
+}
+
+.route-controls button {
+    flex: 1;
+    padding: 0.6rem 0;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #2b2b2b;
+    background-color: #faf9f6;
+    border: 1px solid #cfc9bd;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    margin: 1rem 0;
+}
+
+.route-controls button:hover {
+    background-color: #f2efe8;
+    transform: scale(1.02);
 }

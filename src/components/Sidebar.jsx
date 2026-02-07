@@ -17,7 +17,8 @@ const Sidebar = ({
     loadRoute,
     deleteRoute,
     currentPage,
-    setCurrentPage
+    setCurrentPage,
+    navigate
 }) => {
     return (
     <div className="sidebar">
@@ -46,6 +47,7 @@ const Sidebar = ({
             loadRoute={loadRoute}
             deleteRoute={deleteRoute}
             isAuthenticated={user !== null}
+            navigate={navigate}
         />
         )}
     </div>

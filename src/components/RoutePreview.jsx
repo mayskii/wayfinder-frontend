@@ -1,9 +1,8 @@
 import PropTypes from 'prop-types';
 import './RoutePreview.css';
 
-const RoutePreview = ({ selectedAttractions, isAuthenticated  }) => {
+const RoutePreview = ({ selectedAttractions }) => {
 
-    if (!isAuthenticated) return null;
     
     return (
         <div className="route-preview">
@@ -14,7 +13,7 @@ const RoutePreview = ({ selectedAttractions, isAuthenticated  }) => {
                 <div className="route-path">
                     {selectedAttractions.map((attraction, index) => (
                         <div key={attraction.osm_id || attraction.id || index} className="route-node">
-                            <div className="route-number">{index + 1}</div>
+                            <div className="route-number"><span>{index + 1}</span></div>
                             <div className="route-name">{attraction.name}</div>
                             {index < selectedAttractions.length - 1 && (
                                 <div className="route-arrow">→</div>
