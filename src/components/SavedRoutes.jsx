@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { FaTrashAlt, FaCloudDownloadAlt, FaBook } from 'react-icons/fa';
+import { FaTrashAlt, FaCloudDownloadAlt, FaArrowRight } from 'react-icons/fa';
 import './SavedRoutes.css';
 
 const SavedRoutes = ({
@@ -43,7 +43,7 @@ const SavedRoutes = ({
                     onClick={() => navigate('/my-routes')}
                     title="My Routes Journal"
                 >
-                    <FaBook />
+                    <FaArrowRight />
                 </button>
             </div>
         <ul>

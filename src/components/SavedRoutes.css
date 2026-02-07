@@ -79,7 +79,7 @@
 }
 
 .saved-routes button svg {
-    width: 18px;
+    width: 28px;
     height: 18px;
 }
 
@@ -89,21 +89,25 @@
     justify-content: space-between;
 }
 
-.my-routes-btn {
-    background-color: #faf9f6;
-    border: 1px solid #cfc9bd;
-    color: #2b2b2b;
-    width: 28px;
-    height: 28px;
+.saved-routes .my-routes-btn {
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
+    background-color: #2b2b2b;
+    border: 1px solid #2b2b2b;
+    color: #faf9f6;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    font-size: 0.9rem;
-    transition: background 0.2s;
+    font-size: 1.2rem;
+    transition: all 0.25s ease;
+    position: relative;
+    top: -7px;
 }
 
-.my-routes-btn:hover {
-    background-color: #f2efe8;
+.saved-routes .my-routes-btn:hover {
+    background-color: #faf9f6;
+    color: #2b2b2b;
+    border: 1px solid #cfc9bd;
 }

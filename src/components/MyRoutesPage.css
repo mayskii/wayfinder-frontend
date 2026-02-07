@@ -29,18 +29,22 @@ body,
 .back-btn {
     width: 36px;
     height: 36px;
-    border: 1px solid #cfc9bd;
-    background: #ffffff;
+    border-radius: 50%;
+    background-color: #2b2b2b;
+    border: 1px solid #2b2b2b;
+    color: #faf9f6;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: background 0.2s ease;
-    color: #2b2b2b;
+    font-size: 1.2rem;
+    transition: all 0.25s ease;
 }
 
 .back-btn:hover {
-    background: #f0ede6;
+    background-color: #faf9f6;
+    color: #2b2b2b;
+    border: 1px solid #cfc9bd;
 }
 
 .routes-list {

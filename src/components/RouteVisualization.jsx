@@ -46,7 +46,7 @@ const FitRoute = ({ positions, city, defaultCenter }) => {
         setTimeout(() => {
             map.invalidateSize();
         }, 0);
-        
+
     }, [positions, city, defaultCenter, map]);
 
     return null;
@@ -62,7 +62,7 @@ const RouteVisualization = ({ selectedAttractions, city, onRemoveAttraction, def
             {isMapExpanded && <div className="map-overlay" onClick={toggleMapExpand}></div>}
 
             <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                <button onClick={toggleMapExpand}>
+                <button onClick={toggleMapExpand} className='expand-map-btn'>
                     {isMapExpanded ? 'Collapse Map' : 'Expand Map'}
                 </button>
             </div>
@@ -91,7 +91,7 @@ const RouteVisualization = ({ selectedAttractions, city, onRemoveAttraction, def
 
             {routePositions.length > 1 && (
                 <Polyline positions={routePositions} pathOptions={{
-                    color: '#2f59c3ff',
+                    color: '#1e3c9e',
                     weight: 3,
                     opacity: 0.9,
                     dashArray: '10,6',
