@@ -1,0 +1,156 @@
+html,
+body,
+#root {
+    height: 100%;
+    margin: 0;
+}
+
+.my-routes-page {
+    min-height: 100vh;
+    padding: 2.5rem;
+    background: #f6f4ef;
+    color: #2b2b2b;
+    font-family: Georgia, "Times New Roman", serif;
+}
+
+.journal-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.journal-header h2 {
+    margin: 0;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+}
+
+.back-btn {
+    width: 36px;
+    height: 36px;
+    border: 1px solid #cfc9bd;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    color: #2b2b2b;
+}
+
+.back-btn:hover {
+    background: #f0ede6;
+}
+
+.routes-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.route-item {
+    background: #ffffff;
+    border: 1px solid #d9d4c7;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+}
+
+.route-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.route-name {
+    flex: 1;
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    line-height: 1.4;
+    white-space: normal;
+    word-break: break-word;
+}
+
+.edit-btn {
+    flex-shrink: 0;
+    background: #faf9f6;
+    border: 1px solid #cfc9bd;
+    padding: 4px 10px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    color: #2b2b2b;
+}
+
+.edit-btn:hover {
+    background: #f2efe8;
+}
+
+.route-notes {
+    margin-top: 0.8rem;
+    font-style: italic;
+    color: #555;
+    line-height: 1.6;
+}
+
+.notes-editor {
+    margin-top: 0.8rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.notes-editor textarea {
+    resize: vertical;
+    min-height: 110px;
+    padding: 0.8rem;
+    border: 1px solid #cfc9bd;
+    background: #fff;
+    font-family: inherit;
+    font-size: 0.95rem;
+}
+
+.notes-actions {
+    margin-top: 0.6rem;
+    display: flex;
+    gap: 0.6rem;
+}
+
+.save-btn,
+.cancel-btn {
+    border: 1px solid #cfc9bd;
+    background: #faf9f6;
+    color: #2b2b2b;
+    padding: 4px 12px;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.save-btn:hover,
+.cancel-btn:hover {
+    background: #f2efe8;
+}
+
+.route-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.route-title {
+    flex: 1;
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    line-height: 1.4;
+    white-space: normal;
+    word-break: break-word;
+}
+
+.route-card-header .edit-btn {
+    flex-shrink: 0;
+}

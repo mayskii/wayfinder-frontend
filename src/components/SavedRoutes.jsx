@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { FaTrashAlt, FaCloudDownloadAlt } from 'react-icons/fa';
+import { FaTrashAlt, FaCloudDownloadAlt, FaBook } from 'react-icons/fa';
 import './SavedRoutes.css';
 
 const SavedRoutes = ({
@@ -8,7 +8,8 @@ const SavedRoutes = ({
     setRoutes,
     loadRoute,
     deleteRoute,
-    isAuthenticated
+    isAuthenticated,
+    navigate
 }) => {
     const [dragIndex, setDragIndex] = useState(null);
 
@@ -35,7 +36,16 @@ const SavedRoutes = ({
 
     return (
     <div className="saved-routes">
-        <h4>Saved Routes</h4>
+        <div className="saved-routes-header">
+                <h4>Saved Routes</h4>
+                <button
+                    className="my-routes-btn"
+                    onClick={() => navigate('/my-routes')}
+                    title="My Routes Journal"
+                >
+                    <FaBook />
+                </button>
+            </div>
         <ul>
         {routes.map((route, index) => (
             <li
@@ -76,6 +86,7 @@ SavedRoutes.propTypes = {
     loadRoute: PropTypes.func.isRequired,
     deleteRoute: PropTypes.func.isRequired,
     isAuthenticated: PropTypes.bool.isRequired,
+    navigate: PropTypes.func.isRequired,
 };
 
 export default SavedRoutes;

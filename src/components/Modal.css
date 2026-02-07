@@ -10,23 +10,26 @@
 }
 
 .modal {
-    background: #fff;
+    background: #ffffff;
     padding: 2rem 1.5rem;
     border-radius: 12px;
     width: 340px;
     max-width: 90%;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    transition: transform 0.2s ease, opacity 0.2s ease;
+    font-family: Georgia, "Times New Roman", serif;
+    color: #2b2b2b;
+    transition: transform 0.25s ease, opacity 0.25s ease;
 }
 
 .modal h2 {
     margin: 0;
-    font-size: 1.4rem;
-    color: #1f2937;
+    font-size: 1.3rem;
+    font-weight: 600;
     text-align: center;
+    color: #2b2b2b;
 }
 
 .modal form {
@@ -36,32 +39,36 @@
 }
 
 .modal input {
-    padding: 0.6rem 0.75rem;
+    padding: 0.7rem 0.85rem;
     font-size: 1rem;
-    border-radius: 8px;
-    border: 1px solid #d1d5db;
+    border-radius: 12px;
+    border: 1px solid #d9d4c7;
     outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    font-family: inherit;
+    color: #2b2b2b;
+    transition: border-color 0.25s, box-shadow 0.25s;
 }
 
 .modal input:focus {
-    border-color: #3b82f6;
-    box-shadow: 0 0 5px rgba(59,130,246,0.3);
+    border-color: #d9d4c7;
+    box-shadow: 0 0 6px rgba(0,0,0,0.1);
+    outline: none;
 }
 
 .modal button[type="submit"] {
     padding: 0.6rem 1rem;
-    border-radius: 8px;
-    border: none;
-    background-color: #3b82f6;
-    color: #fff;
-    font-weight: 500;
+    border-radius: 12px;
+    border: 1px solid #d9d4c7;
+    background-color: #faf9f6;
+    color: #2b2b2b;
+    font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.2s, transform 0.1s;
+    font-family: inherit;
+    transition: all 0.25s ease;
 }
 
 .modal button[type="submit"]:hover {
-    background-color: #2563eb;
+    background-color: #f2efe8;
     transform: scale(1.02);
 }
 
@@ -72,11 +79,17 @@
 }
 
 .modal-actions button.cancel {
-    background-color: #f3f4f6;
-    color: #374151;
+    background-color: #faf9f6;
+    border: 1px solid #d9d4c7;
+    color: #2b2b2b;
+    padding: 0.5rem 1rem;
+    border-radius: 12px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.25s ease;
 }
 
 .modal-actions button.cancel:hover {
-    background-color: #e5e7eb;
+    background-color: #f2efe8;
     transform: scale(1.02);
 }

@@ -1,9 +1,8 @@
 import PropTypes from 'prop-types';
 import './RoutePreview.css';
 
-const RoutePreview = ({ selectedAttractions, isAuthenticated  }) => {
+const RoutePreview = ({ selectedAttractions }) => {
 
-    if (!isAuthenticated) return null;
     
     return (
         <div className="route-preview">
