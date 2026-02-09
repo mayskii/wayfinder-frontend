@@ -1,15 +1,15 @@
 import { useState } from 'react';
-import { signIn } from '../auth/authFunctions';
+import { signUp } from '../auth/authFunctions';
 import './Modal.css';
 
-const SignInModal = ({ onClose }) => {
+const SignUpModal = ({ onClose }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-        await signIn(email, password);
+        await signUp(email, password);
         onClose();
     } catch (error) {
         alert(error.message);
@@ -19,7 +19,7 @@ const SignInModal = ({ onClose }) => {
     return (
     <div className="modal-backdrop" onClick={onClose}>
         <div className="modal" onClick={(e) => e.stopPropagation()}>
-        <h2>Sign In</h2>
+        <h2>Sign Up</h2>
         <form onSubmit={handleSubmit}>
             <input
             type="email"
@@ -33,11 +33,11 @@ const SignInModal = ({ onClose }) => {
             value={password}
             onChange={e => setPassword(e.target.value)}
             />
-            <button type="submit">Sign In</button>
+            <button type="submit">Sign Up</button>
         </form>
         </div>
     </div>
     );
 };
 
-export default SignInModal;
+export default SignUpModal;
