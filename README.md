@@ -134,5 +134,5 @@ Ensure the frontend API base URL matches your backend server configuration.
 
 ## 👩‍💻 Author
 
-Wayfinder was developed as a capstone full-stack project ADA Developers Academy.
+Wayfinder was developed as a full-stack travel planning application.
 
