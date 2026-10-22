@@ -2,7 +2,7 @@
 
 A full-stack travel planning application that helps users discover city attractions, generate optimized routes, and keep a personal travel journal with notes about their trips.
 
-**Live demo:** https://wayfinder-taupe.vercel.app (the free backend sleeps when idle, so the first search can take about a minute)
+**Live demo:** https://wayfinder-taupe.vercel.app (the backend runs on a free plan and may sleep when idle, so the first search can take up to two minutes)
 
 Wayfinder combines a React frontend with a Java Spring Boot backend and PostgreSQL database. The system integrates external location APIs and implements backend caching to improve performance and reduce unnecessary API requests.
 
@@ -63,42 +63,29 @@ The backend checks the database cache first and only calls external APIs when da
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/wayfinder-backend.git
-git clone https://github.com/your-username/wayfinder-frontend.git
+git clone https://github.com/mayskii/wayfinder-backend.git
+git clone https://github.com/mayskii/wayfinder-frontend.git
 ```
 
 ### 2. Backend Setup (Spring Boot)
 
-1. Create a PostgreSQL database.
-2. Configure credentials and API keys in:
-
-
-```
-wayfinder-backend/src/main/resources/application.properties
-```
-
-Add:
-
-- database URL  
-- database username and password  
-- LocationIQ API key  
-- any required environment variables
-
+1. Create a PostgreSQL database named `wayfinder`.
+2. Set the environment variables (database URL, username, password and `LOCATIONIQ_API_KEY`). The full list is in the [backend README](https://github.com/mayskii/wayfinder-backend#configuration).
 3. Start the backend server:
 
 ```bash
 cd wayfinder-backend
-./mvnw spring-boot:run
+mvn spring-boot:run
 ```
 
-The backend runs on a local development server. Ports and settings can be adjusted in `application.properties`.
+The backend runs on http://localhost:8080 by default.
 
 ### 3. Frontend Setup (React)
 
 ```bash
 cd wayfinder-frontend
 npm install
-npm start
+npm run dev
 ```
 
 Set the backend address in a `.env` file (defaults to `http://localhost:8080`):
@@ -140,5 +127,5 @@ VITE_API_URL=http://localhost:8080
 
 ## 👩‍💻 Author
 
-Wayfinder was developed as a full-stack travel planning application.
+Designed and built by Maya Zakharova ([GitHub](https://github.com/mayskii)): frontend, backend, database and deployment.
 
