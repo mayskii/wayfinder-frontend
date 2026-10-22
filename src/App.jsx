@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import api from './api';
 
 import Header from './components/Header';
@@ -34,6 +34,9 @@ function MainApp() {
   const [savedRoutes, setSavedRoutes] = useState([]);
   const [showSignIn, setShowSignIn] = useState(false);
   const [loadingAttractions, setLoadingAttractions] = useState(false);
+  const [attractionsError, setAttractionsError] = useState('');
+  // id of the latest attractions request: an older, slower response must not overwrite a newer one
+  const attractionsRequestId = useRef(0);
   const [filterType, setFilterType] = useState('');
   const [currentRouteId, setCurrentRouteId] = useState(null);
   const [isRouteOptimized, setIsRouteOptimized] = useState(false);
@@ -116,18 +119,25 @@ function MainApp() {
   const loadAttractions = async (city, filterType) => {
     if (!city) return;
     const cityName = typeof city === 'string' ? city : city.name;
+    const requestId = ++attractionsRequestId.current;
     setLoadingAttractions(true);
+    setAttractionsError('');
 
     try {
       const response = await api.get(`/attractions/from-osm?cityName=${encodeURIComponent(cityName)}`);
+      if (requestId !== attractionsRequestId.current) return;
       let data = response.data;
       if (filterType) data = data.filter(a => a.category === filterType);
       setAttractions(data);
     } catch (error) {
+      if (requestId !== attractionsRequestId.current) return;
       console.error('Error loading attractions:', error);
       setAttractions([]);
+      setAttractionsError(error.response?.status === 503
+        ? 'The map data service is busy. Please try again in a minute.'
+        : 'Could not load attractions. Please try again.');
     } finally {
-      setLoadingAttractions(false);
+      if (requestId === attractionsRequestId.current) setLoadingAttractions(false);
     }
   };
 
@@ -232,8 +242,7 @@ function MainApp() {
       setIsRouteOptimized(false);
       setCurrentRouteId(null);
     }
-    setCurrentCity(city);
-    if (city?.name) loadAttractions(city.name, filterType);
+    setCurrentCity(city); // the effect above loads its attractions
   };
 
   const loadRoute = async (route) => {
@@ -334,6 +343,7 @@ function MainApp() {
                 user={user}
                 showSignInModal={() => setShowSignIn(true)}
                 loading={loadingAttractions}
+                error={attractionsError}
                 routes={savedRoutes}
                 setRoutes={setSavedRoutes}
                 loadRoute={loadRoute}

@@ -8,6 +8,7 @@ const AttractionList = ({
     setSelectedAttractions, 
     pageSize = 5, 
     loading,
+    error,
     currentPage,
     setCurrentPage
 }) => {
@@ -89,7 +90,7 @@ const AttractionList = ({
                 </>
             ) : (
                 <div className="placeholder">
-                    Please select a city to see attractions
+                    {error || 'Please select a city to see attractions'}
                 </div>
             )}
         </div>
@@ -102,6 +103,7 @@ AttractionList.propTypes = {
     setSelectedAttractions: PropTypes.func.isRequired,
     pageSize: PropTypes.number,
     loading: PropTypes.bool,
+    error: PropTypes.string,
     currentPage: PropTypes.number.isRequired,
     setCurrentPage: PropTypes.func.isRequired,
 };

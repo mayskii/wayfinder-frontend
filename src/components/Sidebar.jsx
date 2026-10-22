@@ -12,6 +12,7 @@ const Sidebar = ({
     user,
     showSignInModal,
     loading,
+    error,
     routes,
     setRoutes,
     loadRoute,
@@ -28,6 +29,7 @@ const Sidebar = ({
             selectedAttractions={selectedAttractions}
             setSelectedAttractions={setSelectedAttractions}
             loading={loading}
+            error={error}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
         />
@@ -63,6 +65,7 @@ Sidebar.propTypes = {
     user: PropTypes.object,
     showSignInModal: PropTypes.func,
     loading: PropTypes.bool,
+    error: PropTypes.string,
     routes: PropTypes.array.isRequired,
     loadRoute: PropTypes.func.isRequired,
     deleteRoute: PropTypes.func.isRequired,
