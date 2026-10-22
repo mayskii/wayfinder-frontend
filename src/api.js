@@ -1,8 +1,8 @@
 import axios from 'axios';
 
+// Backend address: set VITE_API_URL in .env (locally) or in Vercel project settings.
 const api = axios.create({
-    // baseURL: 'http://localhost:8080',
-    baseURL: 'https://spring-boot-production-bb3d.up.railway.app',
+    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8080',
 });
 
 export default api;

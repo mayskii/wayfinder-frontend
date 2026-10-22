@@ -2,6 +2,8 @@
 
 A full-stack travel planning application that helps users discover city attractions, generate optimized routes, and keep a personal travel journal with notes about their trips.
 
+**Live demo:** https://wayfinder-taupe.vercel.app (the free backend sleeps when idle, so the first search can take about a minute)
+
 Wayfinder combines a React frontend with a Java Spring Boot backend and PostgreSQL database. The system integrates external location APIs and implements backend caching to improve performance and reduce unnecessary API requests.
 
 ---
@@ -99,7 +101,11 @@ npm install
 npm start
 ```
 
-Ensure the frontend API base URL matches your backend server configuration.
+Set the backend address in a `.env` file (defaults to `http://localhost:8080`):
+
+```
+VITE_API_URL=http://localhost:8080
+```
 
 ---
 
